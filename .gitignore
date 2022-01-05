@@ -1,0 +1,9 @@
+*.so
+*.g++
+*.gcc
+*.suncc
+*.o
+*.py
+note
+*.my
+*.studio
