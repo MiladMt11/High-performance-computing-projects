@@ -1,0 +1,168 @@
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                20
+On-line CPU(s) list:   0-19
+Thread(s) per core:    1
+Core(s) per socket:    10
+Socket(s):             2
+NUMA node(s):          2
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2660 v3 @ 2.60GHz
+Stepping:              2
+CPU MHz:               2600.000
+CPU max MHz:           3300.0000
+CPU min MHz:           1200.0000
+BogoMIPS:              5188.40
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              25600K
+NUMA node0 CPU(s):     0-9
+NUMA node1 CPU(s):     10-19
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb invpcid_single intel_ppin ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts md_clear spec_ctrl intel_stibp flush_l1d
+   234.375   2067.412 # matmult_nat
+   283.594   2065.152 # matmult_nat
+   343.148   2057.561 # matmult_nat
+   414.586   1980.440 # matmult_nat
+   499.594   1962.682 # matmult_nat
+   607.523   1954.882 # matmult_nat
+   734.273   1930.272 # matmult_nat
+   891.211   1913.661 # matmult_nat
+  1073.344   1903.856 # matmult_nat
+  1305.375   1906.020 # matmult_nat
+  1572.211   1900.208 # matmult_nat
+  1903.711   1868.842 # matmult_nat
+  2310.844   1874.823 # matmult_nat
+  2789.648   1878.585 # matmult_nat
+  3384.375   1883.562 # matmult_nat
+  4095.094   1878.527 # matmult_nat
+  4937.836   1875.988 # matmult_nat
+  5977.148   1876.768 # matmult_nat
+  7245.375   1882.648 # matmult_nat
+  8778.375   1880.336 # matmult_nat
+ 10615.523   1880.672 # matmult_nat
+ 12834.375   1878.235 # matmult_nat
+ 15529.594   1868.076 # matmult_nat
+ 18774.023   1864.411 # matmult_nat
+ 22739.648   1835.745 # matmult_nat
+ 27489.586   1791.884 # matmult_nat
+ 33301.500   1655.994 # matmult_nat
+ 40282.523   1556.714 # matmult_nat
+ 48735.094   1538.248 # matmult_nat
+ 58954.594   1531.927 # matmult_nat
+ 71367.773   1533.609 # matmult_nat
+ 86310.023   1533.554 # matmult_nat
+104445.023   1528.125 # matmult_nat
+126476.461   1530.920 # matmult_nat
+153000.586   1530.134 # matmult_nat
+185064.844   1531.449 # matmult_nat
+223928.461   1532.869 # matmult_nat
+270937.500   1532.196 # matmult_nat
+327834.375   1529.191 # matmult_nat
+396679.594   1534.028 # matmult_nat
+480109.594   1534.828 # matmult_nat
+581025.961   1535.349 # matmult_nat
+702810.375   1536.609 # matmult_nat
+850513.500   1549.620 # matmult_nat
+1028997.094   1569.610 # matmult_nat
+1245223.148   1574.774 # matmult_nat
+1506757.594   1580.706 # matmult_nat
+1823259.375   1580.611 # matmult_nat
+2206143.844   1582.919 # matmult_nat
+2669334.000   1582.113 # matmult_nat
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 11943938: <mm_batch> in cluster <dcc> Done
+
+Job <mm_batch> was submitted from host <n-62-27-18> by user <s212571> in cluster <dcc> at Wed Jan  5 17:32:42 2022
+Job was executed on host(s) <n-62-28-28>, in queue <hpc>, as user <s212571> in cluster <dcc> at Wed Jan  5 17:32:42 2022
+</zhome/6d/6/164418> was used as the home directory.
+</zhome/6d/6/164418/hpc/week1/assign/bscripts> was used as the working directory.
+Started at Wed Jan  5 17:32:42 2022
+Terminated at Wed Jan  5 19:17:49 2022
+Results reported at Wed Jan  5 19:17:49 2022
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+# 02614 - High-Performance Computing, January 2022
+# 
+# batch script to run matmult on a decidated server in the hpcintro
+# queue
+#
+# Author: Bernd Dammann <bd@cc.dtu.dk>
+#
+#BSUB -J mm_batch
+#BSUB -o mm_batch_%J_nat_blk_trans.out
+#BSUB -e mm_batch_%J_nat_blk_trans.err
+#BSUB -q hpc
+#BSUB -n 1
+#BSUB -R "rusage[mem=4096]"
+#BSUB -W 4:00
+#BSUB -R "select[model == XeonE5_2660v3]"
+# uncomment the following line, if you want to assure that your job has
+# a whole CPU for itself (shared L3 cache)
+# #BSUB -R "span[hosts=1] affinity[socket(1)]"
+
+# define the driver name to use
+# valid values: matmult_c.studio, matmult_f.studio, matmult_c.gcc or
+# matmult_f.gcc
+#
+EXECUTABLE=matmult_c.gcc
+
+# define the mkn values in the MKN variable
+#
+SIZES="100 110 121 133 146 161 177 195 214 236 259 285 314 345 380 418 459 505 556 612 673 740 814 895 985 1083 1192 1311 1442 1586 1745 1919 2111 2323 2555 2810 3091 3400 3740 4114 4526 4979 5476 6024 6626 7289 8018 8820 9702 10672"
+
+PERM="nat"
+
+# uncomment and set a reasonable BLKSIZE for the blk version
+#
+# BLKSIZE=1
+
+# enable(1)/disable(0) result checking
+export MATMULT_COMPARE=0
+# export MATMULT_RESULTS={[0]|1}
+# export MFLOPS_MIN_T=[3.0]
+# export MFLOPS_MAX_IT=[infinity]
+
+cd ..
+lscpu
+# start the collect command with the above settings
+for S in $SIZES
+do
+    ./$EXECUTABLE $PERM $S $S $S $BLKSIZE
+done
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   6303.46 sec.
+    Max Memory :                                 3452 MB
+    Average Memory :                             2048.31 MB
+    Total Requested Memory :                     4096.00 MB
+    Delta Memory :                               644.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                5
+    Run time :                                   6307 sec.
+    Turnaround time :                            6307 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <mm_batch_11943938_nat_blk_trans.err> for stderr output of this job.
+

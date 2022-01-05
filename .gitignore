@@ -1,9 +1,11 @@
 *.so
 *.g++
-*.gcc
 *.suncc
 *.o
 *.py
 note
 *.my
 *.studio
+*.er
+Makefile.gcc
+matmult_f.gcc

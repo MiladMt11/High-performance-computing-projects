@@ -7,8 +7,8 @@
 # Author: Bernd Dammann <bd@cc.dtu.dk>
 #
 #BSUB -J mm_batch
-#BSUB -o mm_batch_%J_PERMUTATION.out
-#BSUB -e mm_batch_%J_PERMUTATION.err
+#BSUB -o mm_batch_%J_BLK_32.out
+#BSUB -e mm_batch_%J_BLK_32.err
 #BSUB -q hpc
 #BSUB -n 1
 #BSUB -R "rusage[mem=4096]"
@@ -28,11 +28,11 @@ EXECUTABLE=matmult_c.gcc
 #
 SIZES="100 110 121 133 146 161 177 195 214 236 259 285 314 345 380 418 459 505 556 612 673 740 814 895 985 1083 1192 1311 1442 1586 1745 1919 2111 2323 2555 2810 3091 3400 3740 4114 4526 4979 5476 6024 6626 7289 8018 8820 9702 10672"
 
-PERM="PERMUTATION"
+PERM="blk"
 
 # uncomment and set a reasonable BLKSIZE for the blk version
 #
-# BLKSIZE=1
+BLKSIZE=32
 
 # enable(1)/disable(0) result checking
 export MATMULT_COMPARE=0

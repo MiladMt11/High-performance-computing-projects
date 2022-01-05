@@ -59,5 +59,6 @@ EXPOUT="$LSB_JOBNAME.${JID}.er"
 #
 HWCOUNT="-h dch,on,dcm,on,l2h,on,l2m,on"
 
+cd ..
 # start the collect command with the above settings
 collect -o $EXPOUT $HWCOUNT ./$EXECUTABLE $PERM $MKN $BLKSIZE

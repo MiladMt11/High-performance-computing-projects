@@ -7,7 +7,7 @@
 # Author: Bernd Dammann <bd@cc.dtu.dk>
 #
 #BSUB -J collector
-#BSUB -o collector_%J.out
+#BSUB -o collector_%J_blk.out
 #BSUB -q hpcintro
 #BSUB -n 1
 #BSUB -R "rusage[mem=2048]"
@@ -35,7 +35,7 @@ PERM="per"
 
 # uncomment and set a reasonable BLKSIZE for the blk version
 #
-# BLKSIZE=1
+BLKSIZE=8
 
 # define the max no. of iterations the driver should use - adjust to
 # get a reasonable run time.  You can get an estimate by trying this
@@ -59,5 +59,6 @@ EXPOUT="$LSB_JOBNAME.${JID}.er"
 #
 HWCOUNT="-h dch,on,dcm,on,l2h,on,l2m,on"
 
+cd ..
 # start the collect command with the above settings
 collect -o $EXPOUT $HWCOUNT ./$EXECUTABLE $PERM $MKN $BLKSIZE

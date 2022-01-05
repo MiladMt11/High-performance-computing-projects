@@ -1,0 +1,168 @@
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                20
+On-line CPU(s) list:   0-19
+Thread(s) per core:    1
+Core(s) per socket:    10
+Socket(s):             2
+NUMA node(s):          2
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2660 v3 @ 2.60GHz
+Stepping:              2
+CPU MHz:               2899.926
+CPU max MHz:           3300.0000
+CPU min MHz:           1200.0000
+BogoMIPS:              5187.67
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              25600K
+NUMA node0 CPU(s):     0-9
+NUMA node1 CPU(s):     10-19
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb invpcid_single intel_ppin ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts md_clear spec_ctrl intel_stibp flush_l1d
+   234.375   2254.893 # matmult_blk 25
+   283.594   2466.293 # matmult_blk 25
+   343.148   2348.924 # matmult_blk 25
+   414.586   2222.167 # matmult_blk 25
+   499.594   2273.857 # matmult_blk 25
+   607.523   2277.704 # matmult_blk 25
+   734.273   2248.201 # matmult_blk 25
+   891.211   2279.508 # matmult_blk 25
+  1073.344   2311.876 # matmult_blk 25
+  1305.375   2282.614 # matmult_blk 25
+  1572.211   2322.780 # matmult_blk 25
+  1903.711   2332.733 # matmult_blk 25
+  2310.844   2315.194 # matmult_blk 25
+  2789.648   2312.859 # matmult_blk 25
+  3384.375   2221.968 # matmult_blk 25
+  4095.094   2267.203 # matmult_blk 25
+  4937.836   2211.320 # matmult_blk 25
+  5977.148   2286.753 # matmult_blk 25
+  7245.375   2137.222 # matmult_blk 25
+  8778.375   2132.174 # matmult_blk 25
+ 10615.523   2039.792 # matmult_blk 25
+ 12834.375   2125.050 # matmult_blk 25
+ 15529.594   2121.633 # matmult_blk 25
+ 18774.023   2058.074 # matmult_blk 25
+ 22739.648   2044.502 # matmult_blk 25
+ 27489.586   2077.802 # matmult_blk 25
+ 33301.500   2074.751 # matmult_blk 25
+ 40282.523   2046.233 # matmult_blk 25
+ 48735.094   2122.244 # matmult_blk 25
+ 58954.594   2120.903 # matmult_blk 25
+ 71367.773   2031.285 # matmult_blk 25
+ 86310.023   2060.154 # matmult_blk 25
+104445.023   2044.688 # matmult_blk 25
+126476.461   2071.628 # matmult_blk 25
+153000.586   2293.757 # matmult_blk 25
+185064.844   2117.663 # matmult_blk 25
+223928.461   2108.119 # matmult_blk 25
+270937.500   2071.186 # matmult_blk 25
+327834.375   2112.170 # matmult_blk 25
+396679.594   2095.152 # matmult_blk 25
+480109.594   2095.571 # matmult_blk 25
+581025.961   2035.699 # matmult_blk 25
+702810.375   2054.340 # matmult_blk 25
+850513.500   2033.830 # matmult_blk 25
+1028997.094   2122.318 # matmult_blk 25
+1245223.148   2038.306 # matmult_blk 25
+1506757.594   2131.806 # matmult_blk 25
+1823259.375   2107.553 # matmult_blk 25
+2206143.844   2086.264 # matmult_blk 25
+2669334.000   1881.652 # matmult_blk 25
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 11941815: <mm_batch> in cluster <dcc> Done
+
+Job <mm_batch> was submitted from host <n-62-27-18> by user <s212571> in cluster <dcc> at Wed Jan  5 16:23:09 2022
+Job was executed on host(s) <n-62-28-31>, in queue <hpc>, as user <s212571> in cluster <dcc> at Wed Jan  5 16:23:10 2022
+</zhome/6d/6/164418> was used as the home directory.
+</zhome/6d/6/164418/hpc/week1/assign/bscripts_blk> was used as the working directory.
+Started at Wed Jan  5 16:23:10 2022
+Terminated at Wed Jan  5 17:44:47 2022
+Results reported at Wed Jan  5 17:44:47 2022
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+# 02614 - High-Performance Computing, January 2022
+# 
+# batch script to run matmult on a decidated server in the hpcintro
+# queue
+#
+# Author: Bernd Dammann <bd@cc.dtu.dk>
+#
+#BSUB -J mm_batch
+#BSUB -o mm_batch_%J_BLK_25.out
+#BSUB -e mm_batch_%J_BLK_25.err
+#BSUB -q hpc
+#BSUB -n 1
+#BSUB -R "rusage[mem=4096]"
+#BSUB -W 4:00
+#BSUB -R "select[model == XeonE5_2660v3]"
+# uncomment the following line, if you want to assure that your job has
+# a whole CPU for itself (shared L3 cache)
+# #BSUB -R "span[hosts=1] affinity[socket(1)]"
+
+# define the driver name to use
+# valid values: matmult_c.studio, matmult_f.studio, matmult_c.gcc or
+# matmult_f.gcc
+#
+EXECUTABLE=matmult_c.gcc
+
+# define the mkn values in the MKN variable
+#
+SIZES="100 110 121 133 146 161 177 195 214 236 259 285 314 345 380 418 459 505 556 612 673 740 814 895 985 1083 1192 1311 1442 1586 1745 1919 2111 2323 2555 2810 3091 3400 3740 4114 4526 4979 5476 6024 6626 7289 8018 8820 9702 10672"
+
+PERM="blk"
+
+# uncomment and set a reasonable BLKSIZE for the blk version
+#
+BLKSIZE=25
+
+# enable(1)/disable(0) result checking
+export MATMULT_COMPARE=0
+# export MATMULT_RESULTS={[0]|1}
+# export MFLOPS_MIN_T=[3.0]
+# export MFLOPS_MAX_IT=[infinity]
+
+cd ..
+lscpu
+# start the collect command with the above settings
+for S in $SIZES
+do
+    ./$EXECUTABLE $PERM $S $S $S $BLKSIZE
+done
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   4895.85 sec.
+    Max Memory :                                 2611 MB
+    Average Memory :                             1715.36 MB
+    Total Requested Memory :                     4096.00 MB
+    Delta Memory :                               1485.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                5
+    Run time :                                   4897 sec.
+    Turnaround time :                            4898 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <mm_batch_11941815_BLK_25.err> for stderr output of this job.
+
