@@ -58,7 +58,7 @@ EXPOUT="$LSB_JOBNAME.${JID}.er"
 #
 # the example below is for L1 hits, L1 misses, L2 hits, L2 misses
 #
-HWCOUNT="-h dch,on,dcm,on,l2h,on,l2m,on"
+HWCOUNT="-h dch,on,dcm,on,l2h,on,l2m,on,l3h,on,l3m,on"
 
 cd ..
 # start the collect command with the above settings

@@ -1,0 +1,92 @@
+Loaded module: studio/12u6
+Creating experiment database collector.11979357.er (Process ID: 26311) ...
+User defined signal 2
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 11979357: <collector> in cluster <dcc> Exited
+
+Job <collector> was submitted from host <n-62-30-2> by user <s212571> in cluster <dcc> at Thu Jan  6 16:05:22 2022
+Job was executed on host(s) <n-62-29-12>, in queue <hpc>, as user <s212571> in cluster <dcc> at Thu Jan  6 16:05:23 2022
+</zhome/6d/6/164418> was used as the home directory.
+</zhome/6d/6/164418/hpc/week1/assign/bscripts_perf> was used as the working directory.
+Started at Thu Jan  6 16:05:23 2022
+Terminated at Thu Jan  6 16:21:26 2022
+Results reported at Thu Jan  6 16:21:26 2022
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+# 02614 - High-Performance Computing, January 2022
+# 
+# batch script to run collect on a decidated server in the hpcintro
+# queue
+#
+# Author: Bernd Dammann <bd@cc.dtu.dk>
+#
+#BSUB -J collector
+#BSUB -o collector_%J_nat.out
+#BSUB -q hpc
+#BSUB -n 1
+#BSUB -R "rusage[mem=2048]"
+#BSUB -W 15
+#BSUB -R "select[model == XeonE5_2660v3]"
+# uncomment the following line, if you want to assure that your job has
+# a whole CPU for itself (shared L3 cache)
+#BSUB -R "span[hosts=1] affinity[socket(1)]"
+
+# needed for the collect tool
+module load studio
+
+# define the driver name to use
+# valid values: matmult_c.studio, matmult_f.studio, matmult_c.gcc or
+# matmult_f.gcc
+#
+EXECUTABLE=matmult_c.gcc
+
+# define the mkn values in the MKN variable
+#
+MKN="512 1024 2048"
+
+# define the permutation type in PERM
+#
+PERM="nat"
+
+# uncomment and set a reasonable BLKSIZE for the blk version
+#
+# BLKSIZE=1
+
+# define the max no. of iterations the driver should use - adjust to
+# get a reasonable run time.  You can get an estimate by trying this
+# on the command line, i.e. "MFLOPS_MAX_IT=10 ./matmult_...." for the
+# problem size you want to analyze.
+#
+export MFLOPS_MAX_IT=1000
+export MATMULT_COMPARE=0
+
+# experiment name 
+#
+
+(... more ...)
+------------------------------------------------------------
+
+TERM_RUNLIMIT: job killed after reaching LSF run time limit.
+Exited with exit code 140.
+
+Resource usage summary:
+
+    CPU time :                                   960.00 sec.
+    Max Memory :                                 69 MB
+    Average Memory :                             69.00 MB
+    Total Requested Memory :                     2048.00 MB
+    Delta Memory :                               1979.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                5
+    Run time :                                   963 sec.
+    Turnaround time :                            964 sec.
+
+The output (if any) is above this job summary.
+
