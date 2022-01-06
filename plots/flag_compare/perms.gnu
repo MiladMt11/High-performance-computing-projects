@@ -13,4 +13,5 @@ plot    'o2_mkn.out' title '-O2', \
         'o3_all.out' title '-O3 -ffast-math -floop-unroll', \
      'o3_fm_mkn.out' title '-O3 -ffast-math', \
      'o3_lu_mkn.out' title '-O3 -floop-unroll', \
-        'o3_mkn.out' title '-O3'
+        'o3_mkn.out' title '-O3', \
+     'no_op_mkn.out' title 'No flags'
