@@ -2,7 +2,7 @@ TARGET	= libmatmult.so
 LIBSRCS	= matmult.c
 LIBOBJS	= matmult.o
 
-OPT	= -g #-ffast-math -funroll-loops -O3
+OPT	= -g -O3 -funroll-loops # -ffast-math -funroll-loops
 PIC	= -fPIC
 
 CC	= gcc

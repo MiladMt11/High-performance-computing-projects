@@ -7,14 +7,16 @@
 # Author: Bernd Dammann <bd@cc.dtu.dk>
 #
 #BSUB -J mm_batch
-#BSUB -o mm_batch_%J.out
-#BSUB -q hpcintro
+#BSUB -o mm_batch_%J_lib.out
+#BSUB -e mm_batch_%J_lib.err
+#BSUB -q hpc
 #BSUB -n 1
-#BSUB -R "rusage[mem=2048]"
-#BSUB -W 15
+#BSUB -R "rusage[mem=4096]"
+#BSUB -W 4:00
+#BSUB -R "select[model == XeonE5_2660v3]"
 # uncomment the following line, if you want to assure that your job has
 # a whole CPU for itself (shared L3 cache)
-# #BSUB -R "span[hosts=1] affinity[socket(1)]"
+#BSUB -R "span[hosts=1] affinity[socket(1)]"
 
 # define the driver name to use
 # valid values: matmult_c.studio, matmult_f.studio, matmult_c.gcc or
@@ -24,11 +26,10 @@ EXECUTABLE=matmult_c.gcc
 
 # define the mkn values in the MKN variable
 #
-SIZES="100 200 500"
+SIZES="100 130 169 220 286 371 483 627 816 1060 1379 1792 2330 3029 3937 5119 6654 8650"
+# SIZES="100 110 121 133 146 161 177 195 214 236 259 285 314 345 380 418 459 505 556 612 673 740 814 895 985 1083 1192 1311 1442 1586 1745 1919 2111 2323 2555 2810 3091 3400 3740 4114 4526 4979 5476 6024 6626 7289 8018 8820 9702 10672"
 
-# define the permutation type in PERM
-#
-PERM="mkn"
+PERM="lib"
 
 # uncomment and set a reasonable BLKSIZE for the blk version
 #
@@ -40,18 +41,10 @@ export MATMULT_COMPARE=0
 # export MFLOPS_MIN_T=[3.0]
 # export MFLOPS_MAX_IT=[infinity]
 
-# echo $CPUTYPE
+cd ..
 lscpu
-
-## declare an array of sizes
-declare -a SIZES_ARR=("100 200 500" "100 2000 500" "100 200 5000")
-
-## now loop through the above array
-for SIZE in "${SIZES_ARR[@]}"
+# start the collect command with the above settings
+for S in $SIZES
 do
-    for S in $SIZE
-    do
-        ./$EXECUTABLE $PERM $S $S $S $BLKSIZE
-    done
-# You can access them using echo "${arr[0]}", "${arr[1]}" also
+    ./$EXECUTABLE $PERM $S $S $S $BLKSIZE
 done
