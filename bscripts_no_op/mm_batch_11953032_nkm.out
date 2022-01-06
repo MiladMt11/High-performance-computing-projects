@@ -1,0 +1,163 @@
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                20
+On-line CPU(s) list:   0-19
+Thread(s) per core:    1
+Core(s) per socket:    10
+Socket(s):             2
+NUMA node(s):          2
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 63
+Model name:            Intel(R) Xeon(R) CPU E5-2660 v3 @ 2.60GHz
+Stepping:              2
+CPU MHz:               1201.770
+CPU max MHz:           3300.0000
+CPU min MHz:           1200.0000
+BogoMIPS:              5187.88
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              256K
+L3 cache:              25600K
+NUMA node0 CPU(s):     0-9
+NUMA node1 CPU(s):     10-19
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm epb invpcid_single intel_ppin ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm xsaveopt cqm_llc cqm_occup_llc dtherm ida arat pln pts md_clear spec_ctrl intel_stibp flush_l1d
+   234.375    360.263 # matmult_nkm
+   283.594    359.512 # matmult_nkm
+   343.148    372.825 # matmult_nkm
+   414.586    360.588 # matmult_nkm
+   499.594    345.384 # matmult_nkm
+   607.523    325.262 # matmult_nkm
+   734.273    326.212 # matmult_nkm
+   891.211    300.155 # matmult_nkm
+  1073.344    282.043 # matmult_nkm
+  1305.375    294.160 # matmult_nkm
+  1572.211    296.927 # matmult_nkm
+  1903.711    283.108 # matmult_nkm
+  2310.844    274.470 # matmult_nkm
+  2789.648    277.715 # matmult_nkm
+  3384.375    291.459 # matmult_nkm
+  4095.094    268.624 # matmult_nkm
+  4937.836    271.906 # matmult_nkm
+  5977.148    262.324 # matmult_nkm
+  7245.375    179.677 # matmult_nkm
+  8778.375    289.367 # matmult_nkm
+ 10615.523    280.447 # matmult_nkm
+ 12834.375    295.013 # matmult_nkm
+ 15529.594    281.733 # matmult_nkm
+ 18774.023    284.334 # matmult_nkm
+ 22739.648    280.452 # matmult_nkm
+ 27489.586    289.594 # matmult_nkm
+ 33301.500    318.390 # matmult_nkm
+ 40282.523    271.333 # matmult_nkm
+ 48735.094    271.346 # matmult_nkm
+ 58954.594    243.412 # matmult_nkm
+ 71367.773    227.391 # matmult_nkm
+ 86310.023    155.902 # matmult_nkm
+104445.023    132.074 # matmult_nkm
+126476.461    122.877 # matmult_nkm
+153000.586    119.238 # matmult_nkm
+185064.844    120.507 # matmult_nkm
+223928.461    119.432 # matmult_nkm
+270937.500    176.821 # matmult_nkm
+327834.375    169.329 # matmult_nkm
+396679.594    190.680 # matmult_nkm
+480109.594    117.967 # matmult_nkm
+581025.961    119.469 # matmult_nkm
+702810.375    152.807 # matmult_nkm
+850513.500    179.572 # matmult_nkm
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 11953032: <mm_batch> in cluster <dcc> Exited
+
+Job <mm_batch> was submitted from host <n-62-27-21> by user <s212571> in cluster <dcc> at Wed Jan  5 22:56:56 2022
+Job was executed on host(s) <n-62-29-20>, in queue <hpc>, as user <s212571> in cluster <dcc> at Wed Jan  5 22:56:56 2022
+</zhome/6d/6/164418> was used as the home directory.
+</zhome/6d/6/164418/hpc/week1/assign/bscripts_no_op> was used as the working directory.
+Started at Wed Jan  5 22:56:56 2022
+Terminated at Thu Jan  6 02:56:02 2022
+Results reported at Thu Jan  6 02:56:02 2022
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+# 02614 - High-Performance Computing, January 2022
+# 
+# batch script to run matmult on a decidated server in the hpcintro
+# queue
+#
+# Author: Bernd Dammann <bd@cc.dtu.dk>
+#
+#BSUB -J mm_batch
+#BSUB -o mm_batch_%J_nkm.out
+#BSUB -e mm_batch_%J_nkm.err
+#BSUB -q hpc
+#BSUB -n 1
+#BSUB -R "rusage[mem=4096]"
+#BSUB -W 4:00
+#BSUB -R "select[model == XeonE5_2660v3]"
+# uncomment the following line, if you want to assure that your job has
+# a whole CPU for itself (shared L3 cache)
+#BSUB -R "span[hosts=1] affinity[socket(1)]"
+
+# define the driver name to use
+# valid values: matmult_c.studio, matmult_f.studio, matmult_c.gcc or
+# matmult_f.gcc
+#
+EXECUTABLE=matmult_c.gcc
+
+# define the mkn values in the MKN variable
+#
+SIZES="100 110 121 133 146 161 177 195 214 236 259 285 314 345 380 418 459 505 556 612 673 740 814 895 985 1083 1192 1311 1442 1586 1745 1919 2111 2323 2555 2810 3091 3400 3740 4114 4526 4979 5476 6024 6626 7289 8018 8820 9702 10672"
+
+PERM="nkm"
+
+# uncomment and set a reasonable BLKSIZE for the blk version
+#
+# BLKSIZE=1
+
+# enable(1)/disable(0) result checking
+export MATMULT_COMPARE=0
+# export MATMULT_RESULTS={[0]|1}
+# export MFLOPS_MIN_T=[3.0]
+# export MFLOPS_MAX_IT=[infinity]
+
+cd ..
+lscpu
+# start the collect command with the above settings
+for S in $SIZES
+do
+    ./$EXECUTABLE $PERM $S $S $S $BLKSIZE
+done
+
+------------------------------------------------------------
+
+TERM_RUNLIMIT: job killed after reaching LSF run time limit.
+Exited with exit code 140.
+
+Resource usage summary:
+
+    CPU time :                                   14367.00 sec.
+    Max Memory :                                 1009 MB
+    Average Memory :                             629.95 MB
+    Total Requested Memory :                     4096.00 MB
+    Delta Memory :                               3087.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                5
+    Run time :                                   14449 sec.
+    Turnaround time :                            14346 sec.
+
+The output (if any) is above this job summary.
+
+
+
+PS:
+
+Read file <mm_batch_11953032_nkm.err> for stderr output of this job.
+
