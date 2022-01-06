@@ -8,7 +8,7 @@
 #
 #BSUB -J collector
 #BSUB -o collector_%J.out
-#BSUB -q hpcintro
+#BSUB -q hpc
 #BSUB -n 1
 #BSUB -R "rusage[mem=2048]"
 #BSUB -W 15
