@@ -7,8 +7,8 @@
 # Author: Bernd Dammann <bd@cc.dtu.dk>
 #
 #BSUB -J mm_batch
-#BSUB -o mm_batch_%J_BLK_64.out
-#BSUB -e mm_batch_%J_BLK_64.err
+#BSUB -o mm_batch_%J_BLK_1024.out
+#BSUB -e mm_batch_%J_BLK_1024.err
 #BSUB -q hpc
 #BSUB -n 1
 #BSUB -R "rusage[mem=4096]"
@@ -32,7 +32,7 @@ PERM="blk"
 
 # uncomment and set a reasonable BLKSIZE for the blk version
 #
-BLKSIZE=64
+BLKSIZE=1024
 
 # enable(1)/disable(0) result checking
 export MATMULT_COMPARE=0

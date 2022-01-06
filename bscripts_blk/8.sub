@@ -16,7 +16,7 @@
 #BSUB -R "select[model == XeonE5_2660v3]"
 # uncomment the following line, if you want to assure that your job has
 # a whole CPU for itself (shared L3 cache)
-# #BSUB -R "span[hosts=1] affinity[socket(1)]"
+#BSUB -R "span[hosts=1] affinity[socket(1)]"
 
 # define the driver name to use
 # valid values: matmult_c.studio, matmult_f.studio, matmult_c.gcc or
@@ -26,7 +26,7 @@ EXECUTABLE=matmult_c.gcc
 
 # define the mkn values in the MKN variable
 #
-SIZES="100 110 121 133 146 161 177 195 214 236 259 285 314 345 380 418 459 505 556 612 673 740 814 895 985 1083 1192 1311 1442 1586 1745 1919 2111 2323 2555 2810 3091 3400 3740 4114 4526 4979 5476 6024 6626 7289 8018 8820 9702 10672"
+SIZES="100 130 169 220 286 371 483 627 816 1060 1379 1792 2330 3029 3937 5119 6654 8650"
 
 PERM="blk"
 

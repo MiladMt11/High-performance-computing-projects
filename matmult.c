@@ -58,7 +58,7 @@ double **mat_transpose(int n_rows, int n_cols, double *const *a)
 double **mat_transpose_blk(int n_rows, int n_cols, double *const *a)
 {
     const int blk = 8;
-    int i1,i2, j;
+    int i1, i2, j;
     double **m;
     m = dmalloc_2d(n_cols, n_rows);
     if (m == NULL)
@@ -66,10 +66,10 @@ double **mat_transpose_blk(int n_rows, int n_cols, double *const *a)
         printf("Couldn't allocate new matrix!\n");
         exit(1);
     }
-    for (i1 = 0; i1 < n_rows; i1+=blk)
+    for (i1 = 0; i1 < n_rows; i1 += blk)
         for (j = 0; j < n_cols; ++j)
-            for (i2 = 0; i2 < min(n_rows-i1,blk); i2++)
-                m[j][i1+i2] = a[i1+i2][j];
+            for (i2 = 0; i2 < min(n_rows - i1, blk); i2++)
+                m[j][i1 + i2] = a[i1 + i2][j];
     return m;
 }
 
@@ -224,9 +224,9 @@ void matmult_blk(int m, int n, int k, double **A, double **B, double **C, int bs
                 l_max = min(k, l_block + bs);
                 for (i = i_block; i < i_max; i++)
                 {
-                    for (j = j_block; j < j_max; j++)
+                    for (l = l_block; l < l_max; l++)
                     {
-                        for (l = l_block; l < l_max; l++)
+                        for (j = j_block; j < j_max; j++)
                         {
                             C[i][j] += A[i][l] * B[l][j];
                         }
