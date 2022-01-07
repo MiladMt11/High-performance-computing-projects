@@ -76,12 +76,12 @@ double **mat_transpose_blk(int n_rows, int n_cols, double *const *a)
 void matmult_nat(int m, int n, int k, double **A, double **B, double **C)
 {
     int i, j, l;
+    memset(C[0], 0, sizeof(double) * m * n);
     double **BT = mat_transpose_blk(k, n, B);
     for (i = 0; i < m; i++)
     {
         for (j = 0; j < n; j++)
         {
-            C[i][j] = 0;
             for (l = 0; l < k; l++)
             {
                 C[i][j] += A[i][l] * BT[j][l];
