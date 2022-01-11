@@ -1,0 +1,12 @@
+# echo STATIC
+# for i in 1 2 4 8 16 20 32 64 128; do time OMP_NUM_THREADS=$i OMP_SCHEDULE=static ./mandelbrot; done
+# echo ""
+# echo DYNAMIC
+# for j in 5000 10000
+# do  
+#     echo ""
+#     echo Image size $j
+#     for i in 2 4 8 16 32; do time OMP_PROC_BIND=true OMP_WAIT_POLICY=active OMP_NUM_THREADS=$i OMP_SCHEDULE=dynamic,50 ./mandelbrot $j; done;
+# done
+
+time OMP_NUM_THREADS=16 OMP_SCHEDULE=dynamic,50 ./poisson_j 50 10000 .0001 100
