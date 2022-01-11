@@ -1,0 +1,17 @@
+   234.375   1358.498 # matmult_blk 8
+   396.094   1349.268 # matmult_blk 8
+   669.398   1402.046 # matmult_blk 8
+  1134.375   1409.731 # matmult_blk 8
+  1917.094   1420.589 # matmult_blk 8
+  3225.961   1420.119 # matmult_blk 8
+  5467.711   1421.618 # matmult_blk 8
+  9213.961   1424.433 # matmult_blk 8
+ 15606.000   1438.288 # matmult_blk 8
+ 26334.375   1430.588 # matmult_blk 8
+ 44569.711   1432.283 # matmult_blk 8
+ 75264.000   1416.205 # matmult_blk 8
+127239.844   1417.226 # matmult_blk 8
+215035.336   1420.035 # matmult_blk 8
+363280.523   1414.744 # matmult_blk 8
+614160.023   1406.980 # matmult_blk 8
+1037712.094   1414.003 # matmult_blk 8
