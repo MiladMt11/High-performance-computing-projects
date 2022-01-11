@@ -28,9 +28,11 @@ void gauss_seidel(
                         u[i+1][j][k] +
                         u[i][j+1][k] +
                         u[i][j][k+1];
-
+#if CHECK_CORRECTNESS
+                    double f = 3*M_PI*M_PI*sin(M_PI*x)*sin(M_PI*y)*sin(M_PI*z);
+#else
                     double f = (x <= -0.375 && y <= -0.5 && -(2.0 / 3.0) <= z) ? 200.0 : 0.0;
-
+#endif
                     double old = u[i][j][k];
                     double new = (sum + delta*delta * f) / 6.0;
                     double diff = old - new;
@@ -41,7 +43,6 @@ void gauss_seidel(
             }
         }
 
-        printf("%d %f\n", iter, norm2);
         if (norm2 * norm2 < tolerance) {
             break;
         }

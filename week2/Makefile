@@ -13,13 +13,13 @@ OBJS_GS	= $(MAIN_GS) gauss_seidel.o
 # options and settings for the GCC compilers
 #
 CC	= gcc
-DEFS	= 
-OPT	= -g 
-IPO	= 
-ISA	= 
+DEFS	= -DCHECK_CORRECTNESS=1
+OPT		= -g -O3
+IPO		= 
+ISA		= 
 CHIP	= 
 ARCH	= 
-PARA	= 
+PARA	= -fopenmp
 CFLAGS	= $(DEFS) $(ARCH) $(OPT) $(ISA) $(CHIP) $(IPO) $(PARA) $(XOPTS)
 LDFLAGS = -lm 
 

@@ -3,6 +3,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 #include "alloc3d.h"
 #include "print.h"
 
@@ -55,18 +56,31 @@ main(int argc, char *argv[]) {
     for (int i = 0; i < N+2; ++i) {
       for (int j = 0; j < N+2; ++j) {
         for (int k = 0; k < N+2; ++k) {
+#if CHECK_CORRECTNESS
+          u[i][j][k] = 0;
+#else
           u[i][j][k] = start_T;
+#endif
         }
       }
     }
     for (int i = 0; i < N+2; ++i) {
       for (int j = 0; j < N+2; ++j) {
+#if CHECK_CORRECTNESS
+        u[i][j][0] = 0.0;
+        u[i][j][N+1] = 0.0;
+        u[i][0][j] = 0.0;
+        u[i][N+1][j] = 0.0;
+        u[0][i][j] = 0.0;
+        u[N+1][i][j] = 0.0;
+#else
         u[i][j][0] = 20.0;
         u[i][j][N+1] = 20.0;
         u[i][0][j] = 0.0;
         u[i][N+1][j] = 20.0;
         u[0][i][j] = 20.0;
         u[N+1][i][j] = 20.0;
+#endif
       }
     }
 
@@ -76,6 +90,25 @@ main(int argc, char *argv[]) {
     #ifdef _GAUSS_SEIDEL_H
     gauss_seidel(N, iter_max, tolerance, u);
     #endif
+
+#if CHECK_CORRECTNESS
+    double delta = 2.0 / (double) N;
+    for (int i = 1; i < N+1; ++i) {
+      double x = -1.0 + (i * delta);
+      for (int j = 1; j < N+1; ++j) {
+        double y = -1.0 + (j * delta);
+        for (int k = 1; k < N+1; ++k) {
+            double z = -1.0 + (k * delta);
+            double actual = sin(M_PI*x)*sin(M_PI*y)*sin(M_PI*z);
+            if (fabs(u[i][j][k] - actual) > .1) {
+              printf("Solution is not correct! At the index: [%d][%d][%d]\n" 
+                     "Diff from true: %f - %f = %f.\n",i,j,k, 
+                     u[i][j][k], actual, fabs(u[i][j][k] - actual));
+            }
+        }
+      }
+    }
+#endif
 
     // dump  results if wanted 
     switch(output_type) {

@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// baseline
 double ***jacobi(
     int N,
     int iter_max,
@@ -45,8 +46,11 @@ double ***jacobi(
                         u1[i][j+1][k] +
                         u1[i][j][k+1];
 
+#if CHECK_CORRECTNESS
+                    double f = 3*M_PI*M_PI*sin(M_PI*x)*sin(M_PI*y)*sin(M_PI*z);
+#else
                     double f = (x <= -0.375 && y <= -0.5 && -(2.0 / 3.0) <= z) ? 200.0 : 0.0;
-
+#endif
                     u2[i][j][k] = (sum + delta*delta * f) / 6.0;
                 }
             }
@@ -74,3 +78,4 @@ double ***jacobi(
     free(u1);
     return u2;
 }
+
