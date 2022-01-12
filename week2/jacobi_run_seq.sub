@@ -21,6 +21,7 @@
 
 lscpu
 
+echo "# N iters memory(kB) million_updates/sec"
 for N in `seq 5 5 150`; do
-  ./poisson_j $N 1000000 .001 200
+  ./poisson_j $N 10000 .001 200
 done
