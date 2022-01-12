@@ -38,6 +38,7 @@ export OMP_WAIT_POLICY=active
 #
 # if you use a runtime schedule, define it below
 export OMP_SCHEDULE=dynamic,50
+export OMP_DISPLAY_ENV=verbose
 
 # experiment name 
 #
