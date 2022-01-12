@@ -67,7 +67,7 @@ double ***jacobi(
         }
 
         if (sum2 < tolerance*tolerance) {
-            printf("tol");
+            printf("%d %d\n", N, iter);
             break;
         }
 
