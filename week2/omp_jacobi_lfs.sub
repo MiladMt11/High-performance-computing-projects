@@ -11,7 +11,7 @@
 #       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
 #       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
 #
-#BSUB -o mm_batch_%J_PERMUTATION.out
+#BSUB -o mm_batch_%J.out
 #BSUB -R "rusage[mem=2GB]"
 #BSUB -J collector
 #BSUB -q hpcintro
@@ -26,7 +26,7 @@ module load studio
 EXECUTABLE=poisson_j
 
 # define any command line options for your executable here
-EXECOPTS="100 100000 .00001 100"
+EXECOPTS="100 10000 .0001 200"
 
 # set some OpenMP variables here
 #
@@ -40,13 +40,19 @@ export OMP_WAIT_POLICY=active
 export OMP_SCHEDULE=dynamic,50
 export OMP_DISPLAY_ENV=verbose
 
+# check these?
+# export OMP_PLACES=numa_domains
+# export $VAR=spread
+# export OMP_DISPLAY_AFFINITY=verbose
+
 # experiment name 
 #
 JID=${LSB_JOBID}
 EXPOUT="$LSB_JOBNAME.${JID}.er"
 
 # start the collect command with the above settings
-# collect -o $EXPOUT ./$EXECUTABLE $EXECOPTS
+lscpu
+collect -o $EXPOUT ./$EXECUTABLE $EXECOPTS
 time ./$EXECUTABLE $EXECOPTS
 
 # TODO: discuss
