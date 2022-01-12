@@ -10,10 +10,12 @@ MAIN_GS = main_gs.o
 OBJS_J	= $(MAIN_J) jacobi.o
 OBJS_GS	= $(MAIN_GS) gauss_seidel.o
 
+JV = _JACOBI_OMP_V0
+
 # options and settings for the GCC compilers
 #
 CC		= gcc
-DEFS	= -DCHECK_CORRECTNESS=0 -D_JACOBI_OMP_V3 -D_GAUSS_OMP
+DEFS	= -DCHECK_CORRECTNESS=0 -D$(JV) -D_GAUSS_OMP
 OPT		= -g -O3
 IPO		= 
 ISA		= 
