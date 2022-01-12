@@ -100,7 +100,7 @@ int jacobi(
             }
         }
 
-        if (sum2 * sum2 < tolerance)
+        if (sum2 < tolerance * tolerance)
             break;
 
         double ***utmp = u2;

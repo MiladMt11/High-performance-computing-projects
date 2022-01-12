@@ -13,7 +13,7 @@ OBJS_GS	= $(MAIN_GS) gauss_seidel.o
 # options and settings for the GCC compilers
 #
 CC		= gcc
-DEFS	= -DCHECK_CORRECTNESS=0 -D_JACOBI_OMP_V3
+DEFS	= -DCHECK_CORRECTNESS=0 -D_JACOBI_OMP_V3 -D_GAUSS_OMP
 OPT		= -g -O3
 IPO		= 
 ISA		= 
