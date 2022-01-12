@@ -17,16 +17,16 @@ int gauss_seidel(
     for (iter = 0; iter < iter_max; ++iter) {
         double norm2 = 0.0;
         #ifdef _GAUSS_OMP
-        #pragma omp parallel for ordered(2) schedule(static,1) reduction(+: norm2)
+        #pragma omp parallel for ordered(2) schedule(static,1) shared(delta,u) reduction(+: norm2)
         #endif
         for (int i = 1; i < N+1; ++i) {
             for (int j = 1; j < N+1; ++j) {
-                double x = -1.0 + (i * delta);
-                double y = -1.0 + (j * delta);
                 #ifdef _GAUSS_OMP
                 #pragma omp ordered depend(sink: i-1,j) depend(sink: i,j-1)
                 #endif
                 for (int k = 1; k < N+1; ++k) {
+                    double x = -1.0 + (i * delta);
+                    double y = -1.0 + (j * delta);
                     double z = -1.0 + (k * delta);
                     double sum =
                         u[i-1][j][k] +
