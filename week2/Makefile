@@ -12,8 +12,8 @@ OBJS_GS	= $(MAIN_GS) gauss_seidel.o
 
 # options and settings for the GCC compilers
 #
-CC	= gcc
-DEFS	= -DCHECK_CORRECTNESS=0 -D_JACOBI_OMP_V1
+CC		= gcc
+DEFS	= -DCHECK_CORRECTNESS=0 -D_JACOBI_OMP_V3
 OPT		= -g -O3
 IPO		= 
 ISA		= 
@@ -23,7 +23,7 @@ PARA	= -fopenmp
 CFLAGS	= $(DEFS) $(ARCH) $(OPT) $(ISA) $(CHIP) $(IPO) $(PARA) $(XOPTS)
 LDFLAGS = -lm
 
-all: $(TARGET_J) $(TARGET_GS) 
+all: $(TARGET_J) $(TARGET_GS)
 
 $(TARGET_J): $(OBJECTS) $(OBJS_J)
 	$(CC) -o $@ $(CFLAGS) $(OBJS_J) $(OBJECTS) $(LDFLAGS)
