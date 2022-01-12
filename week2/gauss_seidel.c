@@ -44,6 +44,7 @@ void gauss_seidel(
         }
 
         if (norm2 * norm2 < tolerance) {
+            printf("%d %d\n", N, iter);
             break;
         }
     }
