@@ -24,6 +24,7 @@ int jacobi(
         exit(-1);
     }
 
+    double delta = 2.0 / (double)(N + 2);
 #ifdef _JACOBI_V0
     // no parallel region
 #elif defined(_JACOBI_OMP_V0)
@@ -31,9 +32,9 @@ int jacobi(
 #elif defined(_JACOBI_OMP_V1)
 #pragma omp parallel for
 #elif defined(_JACOBI_OMP_V2)
-#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta, stop)
+#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta)
 #elif defined(_JACOBI_OMP_V3)
-#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta, stop) schedule(runtime)
+#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta) schedule(runtime)
 #endif
     for (int i = 0; i < N + 2; ++i) // Copy over boundary conditions.
     {
@@ -41,13 +42,12 @@ int jacobi(
         {
             for (int k = 0; k < N + 2; ++k)
             {
-                u2[i][j][k] = u[i][j][k];
+                u2[i][j][k] = u1[i][j][k];
             }
         }
     }
 
-    double delta = 2.0 / (double)(N + 2);
-    for (int iter = 0; iter < iter_max; ++iter)
+    for (iter = 0; iter < iter_max; ++iter)
     {
 #ifdef _JACOBI_V0
         // no parallel region
@@ -56,9 +56,9 @@ int jacobi(
 #elif defined(_JACOBI_OMP_V1)
 #pragma omp parallel for
 #elif defined(_JACOBI_OMP_V2)
-#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta, stop)
+#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta)
 #elif defined(_JACOBI_OMP_V3)
-#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta, stop) schedule(runtime)
+#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta) schedule(runtime)
 #endif
         for (int i = 1; i < N + 1; ++i)
         {
