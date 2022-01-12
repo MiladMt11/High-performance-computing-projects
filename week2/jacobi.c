@@ -49,6 +49,7 @@ int jacobi(
 
     for (iter = 0; iter < iter_max; ++iter)
     {
+        double norm = 0.0;
 #ifdef _JACOBI_V0
         // no parallel region
 #elif defined(_JACOBI_OMP_V0)
@@ -56,9 +57,9 @@ int jacobi(
 #elif defined(_JACOBI_OMP_V1)
 #pragma omp parallel for
 #elif defined(_JACOBI_OMP_V2)
-#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta)
+#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta) reduction(+: norm)
 #elif defined(_JACOBI_OMP_V3)
-#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta) schedule(runtime)
+#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta) schedule(runtime) reduction(+: norm)
 #endif
         for (int i = 1; i < N + 1; ++i)
         {
@@ -83,24 +84,14 @@ int jacobi(
                     double f = (x <= -0.375 && y <= -0.5 && -(2.0 / 3.0) <= z) ? 200.0 : 0.0;
 #endif
                     u2[i][j][k] = (sum + delta * delta * f) / 6.0;
-                }
-            }
-        }
 
-        double sum2 = 0.0;
-        for (int i = 1; i < N + 1; ++i)
-        {
-            for (int j = 1; j < N + 1; ++j)
-            {
-                for (int k = 1; k < N + 1; ++k)
-                {
                     double diff = u1[i][j][k] - u2[i][j][k];
-                    sum2 += diff * diff;
+                    norm += diff * diff;
                 }
             }
         }
 
-        if (sum2 < tolerance * tolerance)
+        if (norm < tolerance * tolerance)
             break;
 
         double ***utmp = u2;
