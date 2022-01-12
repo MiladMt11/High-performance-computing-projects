@@ -20,6 +20,7 @@
 #BSUB -n 16 -R "span[hosts=1]"
 
 module load studio
+module load gcc/11.2.0-binutils-2.37
 
 # define the executable here
 #
