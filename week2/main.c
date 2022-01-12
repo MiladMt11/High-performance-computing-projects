@@ -92,7 +92,7 @@ main(int argc, char *argv[]) {
     #endif
 
 #if CHECK_CORRECTNESS
-    double delta = 2.0 / (double) N;
+    double delta = 2.0 / (double) (N+2);
     for (int i = 1; i < N+1; ++i) {
       double x = -1.0 + (i * delta);
       for (int j = 1; j < N+1; ++j) {
@@ -117,15 +117,15 @@ main(int argc, char *argv[]) {
              break;
          case 3:
              output_ext = ".bin";
-             sprintf(output_filename, "%s_%d%s", output_prefix, N, output_ext);
+             sprintf(output_filename, "%s_%d%s", output_prefix, N+2, output_ext);
              fprintf(stderr, "Write binary dump to %s: ", output_filename);
-             print_binary(output_filename, N, u);
+             print_binary(output_filename, N+2, u);
              break;
          case 4:
              output_ext = ".vtk";
-             sprintf(output_filename, "%s_%d%s", output_prefix, N, output_ext);
+             sprintf(output_filename, "%s_%d%s", output_prefix, N+2, output_ext);
              fprintf(stderr, "Write VTK file to %s: ", output_filename);
-             print_vtk(output_filename, N, u);
+             print_vtk(output_filename, N+2, u);
              break;
          default:
              fprintf(stderr, "Non-supported output type!\n");
