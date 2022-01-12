@@ -7,6 +7,7 @@
 #include <time.h>
 #include "alloc3d.h"
 #include "print.h"
+#include "omp.h"
 
 #ifdef _JACOBI
 #include "jacobi.h"
@@ -86,15 +87,14 @@ main(int argc, char *argv[]) {
     }
 
     int iters;
-
-    clock_t start = clock();
+    double start = omp_get_wtime(); 
     #ifdef _JACOBI
     iters = jacobi(N, iter_max, tolerance, &u);
     #endif
     #ifdef _GAUSS_SEIDEL_H
     iters = gauss_seidel(N, iter_max, tolerance, u);
     #endif
-    clock_t end = clock();
+    double end = omp_get_wtime();
 
     double dN = (double) N;
 
@@ -103,10 +103,10 @@ main(int argc, char *argv[]) {
     bytes_alloc *= 2;
     #endif
 
-    double running_time = (double)(end - start) / CLOCKS_PER_SEC;
+    double running_time = end - start;
     double updates_per_sec = (iters * dN*dN*dN) / running_time;
 
-    printf("%d %d %f %f\n", N, iters, bytes_alloc / 1e3, updates_per_sec / 1e6);
+    printf("%d %d %f %f %f\n", N, iters, bytes_alloc / 1e3, updates_per_sec / 1e6, running_time);
 
 #if CHECK_CORRECTNESS
     double delta = 2.0 / (double) (N+2);
