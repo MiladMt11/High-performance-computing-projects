@@ -5,15 +5,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void gauss_seidel(
+int gauss_seidel(
     int N,
     int iter_max,
     double tolerance,
     double ***u
 ) {
+    int iter;
     double delta = 2.0 / (double) N;
 
-    for (int iter = 0; iter < iter_max; ++iter) {
+    for (iter = 0; iter < iter_max; ++iter) {
         double norm2 = 0.0;
         for (int i = 1; i < N+1; ++i) {
             double x = -1.0 + (i * delta);
@@ -44,10 +45,10 @@ void gauss_seidel(
         }
 
         if (norm2 * norm2 < tolerance) {
-            printf("%d %d\n", N, iter);
             break;
         }
     }
 
+    return iter;
 }
 

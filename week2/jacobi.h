@@ -7,11 +7,11 @@
 #define _JACOBI_H
 
 //int jacobi(double ***, double ***, double ***, int, int, double *);
-double ***jacobi(
+int jacobi(
     int N,
     int iter_max,
     double tolerance,
-    double ***u
+    double ****u
 );
 
 #endif

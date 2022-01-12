@@ -7,15 +7,15 @@
 #include <stdlib.h>
 
 // baseline
-double ***jacobi(
+int jacobi(
     int N,
     int iter_max,
     double tolerance,
-    double ***u
+    double ****u
 ) {
-
+    int iter;
     double ***u1, ***u2;
-    u1 = u;
+    u1 = *u;
     if ( (u2 = d_malloc_3d(N+2, N+2, N+2)) == NULL ) {
         perror("array u2: allocation failed");
         exit(-1);
@@ -25,13 +25,13 @@ double ***jacobi(
     for (int i = 0; i < N+2; ++i) {
         for (int j = 0; j < N+2; ++j) {
             for (int k = 0; k < N+2; ++k) {
-                u2[i][j][k] = u[i][j][k];
+                u2[i][j][k] = u1[i][j][k];
             }
         }
     }
 
     double delta = 2.0 / (double) (N+2);
-    for (int iter = 0; iter < iter_max; ++iter) {
+    for (iter = 0; iter < iter_max; ++iter) {
         for (int i = 1; i < N+1; ++i) {
             double x = -1.0 + (i * delta);
             for (int j = 1; j < N+1; ++j) {
@@ -67,7 +67,6 @@ double ***jacobi(
         }
 
         if (sum2 < tolerance*tolerance) {
-            printf("%d %d\n", N, iter);
             break;
         }
 
@@ -77,5 +76,6 @@ double ***jacobi(
     }
 
     free(u1);
-    return u2;
+    *u = u2;
+    return iter;
 }
