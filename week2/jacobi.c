@@ -5,8 +5,6 @@
 #include "alloc3d.h"
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdbool.h>
-#include "omp.h"
 
 // baseline
 double ***jacobi(
@@ -15,7 +13,6 @@ double ***jacobi(
     double tolerance,
     double ***u
 ) {
-    double delta = 2.0 / (double) N;
 
     double ***u1, ***u2;
     u1 = u;
@@ -23,13 +20,8 @@ double ***jacobi(
         perror("array u2: allocation failed");
         exit(-1);
     }
-    volatile bool stop = false;
-
-    #pragma omp parallel shared(u1,u2,N,iter_max,tolerance,delta,stop)
-    {
 
     // Copy over boundary conditions.
-    #pragma omp for
     for (int i = 0; i < N+2; ++i) {
         for (int j = 0; j < N+2; ++j) {
             for (int k = 0; k < N+2; ++k) {
@@ -38,20 +30,8 @@ double ***jacobi(
         }
     }
 
-
-// #ifdef _JACOBI_OMP_V1
-//     #pragma omp parallel for
-// #elif defined(_JACOBI_OMP_V2)
-//     #pragma omp parallel for default(none) shared(u1,u2,N,iter_max,tolerance,delta,stop)
-// #elif defined(_JACOBI_OMP_V3)
-//     #pragma omp parallel for default(none) shared(u1,u2,N,iter_max,tolerance,delta,stop) \
-//                 schedule(runtime)
-// #endif
-
-    #pragma omp for
+    double delta = 2.0 / (double) (N+2);
     for (int iter = 0; iter < iter_max; ++iter) {
-        // int tn = omp_get_thread_num();
-        // printf("%d", tn);
         for (int i = 1; i < N+1; ++i) {
             double x = -1.0 + (i * delta);
             for (int j = 1; j < N+1; ++j) {
@@ -86,19 +66,14 @@ double ***jacobi(
             }
         }
 
-        if (sum2 * sum2 < tolerance) {
-            #pragma omp critical
-            stop = true;
+        if (sum2 < tolerance*tolerance) {
+            printf("tol");
+            break;
         }
 
-       #pragma omp critical
-       {
-            double ***utmp = u2;
-            u2 = u1;
-            u1 = utmp;
-       }
-    }
-
+        double ***utmp = u2;
+        u2 = u1;
+        u1 = utmp;
     }
 
     free(u1);
