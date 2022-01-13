@@ -53,9 +53,9 @@ int jacobi(
 #ifdef _JACOBI_V0
         // no parallel region
 #elif defined(_JACOBI_OMP_V0)
-#pragma omp parallel for
+#pragma omp parallel for reduction(+: norm)
 #elif defined(_JACOBI_OMP_V1)
-#pragma omp parallel for
+#pragma omp parallel for reduction(+: norm)
 #elif defined(_JACOBI_OMP_V2)
 #pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta) reduction(+: norm)
 #elif defined(_JACOBI_OMP_V3)
