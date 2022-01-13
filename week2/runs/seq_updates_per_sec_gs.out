@@ -12,10 +12,10 @@ CPU family:            6
 Model:                 79
 Model name:            Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
 Stepping:              1
-CPU MHz:               2199.865
-CPU max MHz:           2200.0000
+CPU MHz:               2200.000
+CPU max MHz:           2900.0000
 CPU min MHz:           1200.0000
-BogoMIPS:              4389.91
+BogoMIPS:              4389.40
 Virtualization:        VT-x
 L1d cache:             32K
 L1i cache:             32K
@@ -23,50 +23,50 @@ L2 cache:              256K
 L3 cache:              30720K
 NUMA node0 CPU(s):     0-11
 NUMA node1 CPU(s):     12-23
-Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 cdp_l3 invpcid_single intel_ppin intel_pt ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a rdseed adx smap xsaveopt cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm arat pln pts md_clear spec_ctrl intel_stibp flush_l1d
-# N iters memory(kB) million_updates/sec
-5 29 1.000000 inf
-10 94 8.000000 inf
-15 195 27.000000 inf
-20 329 64.000000 131.600000
-25 498 125.000000 97.265625
-30 700 216.000000 85.909091
-35 934 343.000000 83.427604
-40 1200 512.000000 81.702128
-45 1499 729.000000 80.350809
-50 1829 1000.000000 79.383681
-55 2191 1331.000000 78.561988
-60 2583 1728.000000 78.031888
-65 3007 2197.000000 77.685548
-70 3461 2744.000000 77.286654
-75 3946 3375.000000 76.963419
-80 4461 4096.000000 76.696844
-85 5006 4913.000000 76.475367
-90 5581 5832.000000 76.247170
-95 6187 6859.000000 76.062219
-100 6821 8000.000000 75.890076
-105 7486 9261.000000 75.738339
-110 8181 10648.000000 75.606937
-115 8904 12167.000000 75.480023
-120 9657 13824.000000 75.361496
-125 10000 15625.000000 75.264933
-130 10000 17576.000000 75.167647
-135 10000 19683.000000 75.091561
-140 10000 21952.000000 74.995217
-145 10000 24389.000000 74.915835
-User defined signal 2
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 cdp_l3 invpcid_single intel_ppin intel_pt ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a rdseed adx smap xsaveopt cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts md_clear spec_ctrl intel_stibp flush_l1d
+# N iters memory(kB) million_updates/sec running_time
+5 47 1.000000 140.721611 0.000042
+10 157 8.000000 119.648042 0.001312
+15 328 27.000000 99.514215 0.011124
+20 560 64.000000 91.040669 0.049209
+25 852 125.000000 86.931869 0.153137
+30 1203 216.000000 84.004279 0.386659
+35 1614 343.000000 82.274347 0.841091
+40 2082 512.000000 80.915562 1.646754
+45 2609 729.000000 79.971273 2.972882
+50 3194 1000.000000 79.149598 5.044245
+55 3836 1331.000000 78.551616 8.124779
+60 4535 1728.000000 77.998589 12.558689
+65 5292 2197.000000 77.569694 18.735610
+70 6106 2744.000000 77.194528 27.130913
+75 6977 3375.000000 76.884769 38.283550
+80 7904 4096.000000 76.617932 52.818549
+85 8888 4913.000000 76.273844 71.562448
+90 9927 5832.000000 75.918435 95.323131
+95 10000 6859.000000 75.606002 113.400388
+100 10000 8000.000000 75.428389 132.576079
+105 10000 9261.000000 74.762082 154.841194
+110 10000 10648.000000 75.322397 176.707069
+115 10000 12167.000000 75.405992 201.691532
+120 10000 13824.000000 74.834495 230.909557
+125 10000 15625.000000 72.267479 270.263335
+130 10000 17576.000000 72.573702 302.726739
+135 10000 19683.000000 71.415805 344.514077
+140 10000 21952.000000 71.799885 382.173315
+145 10000 24389.000000 71.560947 426.017978
+150 10000 27000.000000 72.175964 467.607191
 
 ------------------------------------------------------------
 Sender: LSF System <lsfadmin@hpc.dtu.dk>
-Subject: Job 12139312: <poisson_gs> in cluster <dcc> Exited
+Subject: Job 12153519: <poisson_gs> in cluster <dcc> Done
 
-Job <poisson_gs> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Wed Jan 12 15:48:29 2022
-Job was executed on host(s) <n-62-21-74>, in queue <hpcintro>, as user <s200770> in cluster <dcc> at Wed Jan 12 15:48:31 2022
+Job <poisson_gs> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Thu Jan 13 11:42:46 2022
+Job was executed on host(s) <n-62-21-75>, in queue <hpcintro>, as user <s200770> in cluster <dcc> at Thu Jan 13 11:42:47 2022
 </zhome/7e/c/151330> was used as the home directory.
 </zhome/7e/c/151330/hpc/week2> was used as the working directory.
-Started at Wed Jan 12 15:48:31 2022
-Terminated at Wed Jan 12 16:33:57 2022
-Results reported at Wed Jan 12 16:33:57 2022
+Started at Thu Jan 13 11:42:47 2022
+Terminated at Thu Jan 13 12:41:47 2022
+Results reported at Thu Jan 13 12:41:47 2022
 
 Your job looked like:
 
@@ -85,7 +85,7 @@ Your job looked like:
 #       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
 #       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
 #
-#BSUB -o mm_batch_%J.out
+#BSUB -o mm_batch_poisson_gs_%J.out
 #BSUB -R "rusage[mem=2GB]"
 #BSUB -J poisson_gs
 #BSUB -q hpcintro
@@ -95,28 +95,27 @@ Your job looked like:
 
 lscpu
 
-echo "# N iters memory(kB) million_updates/sec"
+echo "# N iters memory(kB) million_updates/sec running_time"
 for N in `seq 5 5 150`; do
   ./poisson_gs $N 10000 .001 200
 done
 
 ------------------------------------------------------------
 
-TERM_RUNLIMIT: job killed after reaching LSF run time limit.
-Exited with exit code 140.
+Successfully completed.
 
 Resource usage summary:
 
-    CPU time :                                   2724.00 sec.
+    CPU time :                                   3539.74 sec.
     Max Memory :                                 31 MB
-    Average Memory :                             21.73 MB
+    Average Memory :                             21.57 MB
     Total Requested Memory :                     2048.00 MB
     Delta Memory :                               2017.00 MB
     Max Swap :                                   -
     Max Processes :                              4
     Max Threads :                                5
-    Run time :                                   2726 sec.
-    Turnaround time :                            2728 sec.
+    Run time :                                   3540 sec.
+    Turnaround time :                            3541 sec.
 
 The output (if any) is above this job summary.
 

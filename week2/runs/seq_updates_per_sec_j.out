@@ -12,10 +12,10 @@ CPU family:            6
 Model:                 79
 Model name:            Intel(R) Xeon(R) CPU E5-2650 v4 @ 2.20GHz
 Stepping:              1
-CPU MHz:               2199.865
+CPU MHz:               2200.000
 CPU max MHz:           2900.0000
 CPU min MHz:           1200.0000
-BogoMIPS:              4389.90
+BogoMIPS:              4389.40
 Virtualization:        VT-x
 L1d cache:             32K
 L1i cache:             32K
@@ -24,49 +24,49 @@ L3 cache:              30720K
 NUMA node0 CPU(s):     0-11
 NUMA node1 CPU(s):     12-23
 Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 cdp_l3 invpcid_single intel_ppin intel_pt ssbd ibrs ibpb stibp tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid rtm cqm rdt_a rdseed adx smap xsaveopt cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm ida arat pln pts md_clear spec_ctrl intel_stibp flush_l1d
-# N iters memory(kB) million_updates/sec
-5 87 2.000000 inf
-10 295 16.000000 inf
-15 619 54.000000 inf
-20 1057 128.000000 281.866667
-25 1608 250.000000 314.062500
-30 2270 432.000000 278.590909
-35 3043 686.000000 289.930278
-40 3927 1024.000000 279.253333
-45 4919 1458.000000 271.662955
-50 6020 2000.000000 278.703704
-55 7230 2662.000000 287.773026
-60 8547 3456.000000 279.296823
-65 9972 4394.000000 288.877690
-70 10000 5488.000000 277.732794
-75 10000 6750.000000 287.772851
-80 10000 8192.000000 286.834734
-85 10000 9826.000000 293.138425
-90 10000 11664.000000 287.687451
-95 10000 13718.000000 290.143824
-100 10000 16000.000000 288.101412
-105 10000 18522.000000 292.699115
-110 10000 21296.000000 287.970576
-115 10000 24334.000000 291.970628
-120 10000 27648.000000 281.524927
-125 10000 31250.000000 274.007435
-130 10000 35152.000000 260.833432
-135 10000 39366.000000 258.361336
-140 10000 43904.000000 257.725181
-145 10000 48778.000000 249.969252
-150 10000 54000.000000 251.209527
+# N iters memory(kB) million_updates/sec running_time
+5 87 2.000000 226.567369 0.000048
+10 295 16.000000 293.616185 0.001005
+15 619 54.000000 318.481262 0.006560
+20 1057 128.000000 334.883503 0.025251
+25 1608 250.000000 330.159241 0.076100
+30 2270 432.000000 317.707447 0.192913
+35 3043 686.000000 330.690735 0.394534
+40 3927 1024.000000 326.445226 0.769893
+45 4919 1458.000000 348.109839 1.287651
+50 6020 2000.000000 326.808395 2.302572
+55 7230 2662.000000 340.030010 3.537603
+60 8547 3456.000000 335.536866 5.502084
+65 9972 4394.000000 350.322015 7.817266
+70 10000 5488.000000 327.454182 10.474748
+75 10000 6750.000000 345.744059 12.201945
+80 10000 8192.000000 336.750771 15.204123
+85 10000 9826.000000 347.813599 17.656728
+90 10000 11664.000000 335.230412 21.746237
+95 10000 13718.000000 353.673979 24.241959
+100 10000 16000.000000 340.142001 29.399486
+105 10000 18522.000000 356.607395 32.462170
+110 10000 21296.000000 335.036883 39.726969
+115 10000 24334.000000 350.553714 43.384935
+120 10000 27648.000000 328.887634 52.540741
+125 10000 31250.000000 331.817032 58.861505
+130 10000 35152.000000 307.800359 71.377435
+135 10000 39366.000000 334.690775 73.511886
+140 10000 43904.000000 331.412582 82.797098
+145 10000 48778.000000 323.595005 94.211127
+150 10000 54000.000000 326.697652 103.306528
 
 ------------------------------------------------------------
 Sender: LSF System <lsfadmin@hpc.dtu.dk>
-Subject: Job 12139311: <poisson_j> in cluster <dcc> Done
+Subject: Job 12153518: <poisson_j> in cluster <dcc> Done
 
-Job <poisson_j> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Wed Jan 12 15:48:29 2022
-Job was executed on host(s) <n-62-21-77>, in queue <hpcintro>, as user <s200770> in cluster <dcc> at Wed Jan 12 15:48:29 2022
+Job <poisson_j> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Thu Jan 13 11:42:46 2022
+Job was executed on host(s) <n-62-21-75>, in queue <hpcintro>, as user <s200770> in cluster <dcc> at Thu Jan 13 11:42:47 2022
 </zhome/7e/c/151330> was used as the home directory.
 </zhome/7e/c/151330/hpc/week2> was used as the working directory.
-Started at Wed Jan 12 15:48:29 2022
-Terminated at Wed Jan 12 16:05:06 2022
-Results reported at Wed Jan 12 16:05:06 2022
+Started at Thu Jan 13 11:42:47 2022
+Terminated at Thu Jan 13 11:56:13 2022
+Results reported at Thu Jan 13 11:56:13 2022
 
 Your job looked like:
 
@@ -85,7 +85,7 @@ Your job looked like:
 #       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
 #       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
 #
-#BSUB -o mm_batch_%J.out
+#BSUB -o mm_batch_poisson_j_%J.out
 #BSUB -R "rusage[mem=2GB]"
 #BSUB -J poisson_j
 #BSUB -q hpcintro
@@ -95,7 +95,7 @@ Your job looked like:
 
 lscpu
 
-echo "# N iters memory(kB) million_updates/sec"
+echo "# N iters memory(kB) million_updates/sec running_time"
 for N in `seq 5 5 150`; do
   ./poisson_j $N 10000 .001 200
 done
@@ -106,16 +106,16 @@ Successfully completed.
 
 Resource usage summary:
 
-    CPU time :                                   996.04 sec.
+    CPU time :                                   805.30 sec.
     Max Memory :                                 58 MB
-    Average Memory :                             40.18 MB
+    Average Memory :                             38.62 MB
     Total Requested Memory :                     2048.00 MB
     Delta Memory :                               1990.00 MB
     Max Swap :                                   -
     Max Processes :                              4
     Max Threads :                                5
-    Run time :                                   997 sec.
-    Turnaround time :                            997 sec.
+    Run time :                                   806 sec.
+    Turnaround time :                            807 sec.
 
 The output (if any) is above this job summary.
 
