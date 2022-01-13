@@ -4,6 +4,7 @@ if [ $# -eq 1 ]
   then
     mrun poisson_j_serial 
 fi
+mkdir -p experiments/jacobi_serial
 cp poisson_j_serial experiments/jacobi_serial/jacobi_serial
 
 make clean
@@ -12,6 +13,7 @@ if [ $# -eq 1 ]
   then
     mrun poisson_j_omp_v0
 fi
+mkdir -p experiments/poisson_j_omp_v0/
 cp poisson_j_omp_v0 experiments/poisson_j_omp_v0/
 
 make clean
@@ -20,6 +22,7 @@ if [ $# -eq 1 ]
   then
     mrun poisson_j_omp_v1
 fi
+mkdir -p experiments/poisson_j_omp_v1/
 cp poisson_j_omp_v1 experiments/poisson_j_omp_v1/
 
 make clean
@@ -28,12 +31,5 @@ if [ $# -eq 1 ]
   then
     mrun poisson_j_omp_v2
 fi
+mkdir -p experiments/poisson_j_omp_v2/
 cp poisson_j_omp_v2 experiments/poisson_j_omp_v2/
-
-make clean
-make TARGET_J=poisson_j_omp_v3 JV=_JACOBI_OMP_V3
-if [ $# -eq 1 ]
-   then
-    mrun poisson_j_omp_v3
-fi
-cp poisson_j_omp_v3 experiments/poisson_j_omp_v3/

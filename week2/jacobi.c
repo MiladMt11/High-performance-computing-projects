@@ -17,10 +17,14 @@ int jacobi(
 {
     int iter;
     double ***u1, ***u2;
-    u1 = *u;
     if ((u2 = d_malloc_3d(N + 2, N + 2, N + 2)) == NULL)
     {
         perror("array u2: allocation failed");
+        exit(-1);
+    }
+    if ((u1 = d_malloc_3d(N + 2, N + 2, N + 2)) == NULL)
+    {
+        perror("array u1: allocation failed");
         exit(-1);
     }
 
@@ -29,12 +33,10 @@ int jacobi(
     // no parallel region
 #elif defined(_JACOBI_OMP_V0)
     // no parallel region
-#elif defined(_JACOBI_OMP_V1)
+#elif defined(_JACOBI_OMP_V1) // parallel for NUMA
 #pragma omp parallel for
 #elif defined(_JACOBI_OMP_V2)
-#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta)
-#elif defined(_JACOBI_OMP_V3)
-#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta) schedule(runtime)
+#pragma omp parallel for schedule(runtime)
 #endif
     for (int i = 0; i < N + 2; ++i) // Copy over boundary conditions.
     {
@@ -42,7 +44,8 @@ int jacobi(
         {
             for (int k = 0; k < N + 2; ++k)
             {
-                u2[i][j][k] = u1[i][j][k];
+                u1[i][j][k] = (*u)[i][j][k];
+                u2[i][j][k] = (*u)[i][j][k];
             }
         }
     }
@@ -53,13 +56,14 @@ int jacobi(
 #ifdef _JACOBI_V0
         // no parallel region
 #elif defined(_JACOBI_OMP_V0)
-#pragma omp parallel for reduction(+: norm)
+#pragma omp parallel for reduction(+ \
+                                   : norm)
 #elif defined(_JACOBI_OMP_V1)
-#pragma omp parallel for reduction(+: norm)
+#pragma omp parallel for reduction(+ \
+                                   : norm)
 #elif defined(_JACOBI_OMP_V2)
-#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta) reduction(+: norm)
-#elif defined(_JACOBI_OMP_V3)
-#pragma omp parallel for default(none) shared(u, u1, u2, N, iter_max, tolerance, delta) schedule(runtime) reduction(+: norm)
+#pragma omp parallel for reduction(+ \
+                                   : norm) schedule(runtime)
 #endif
         for (int i = 1; i < N + 1; ++i)
         {
@@ -99,7 +103,19 @@ int jacobi(
         u1 = utmp;
     }
 
+    // copy
+    for (int i = 0; i < N + 2; ++i)
+    {
+        for (int j = 0; j < N + 2; ++j)
+        {
+            for (int k = 0; k < N + 2; ++k)
+            {
+                (*u)[i][j][k] = u2[i][j][k];
+            }
+        }
+    }
     free(u1);
-    *u = u2;
+    free(u2);
+
     return iter;
 }
