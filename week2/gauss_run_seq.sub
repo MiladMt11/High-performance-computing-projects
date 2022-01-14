@@ -11,7 +11,7 @@
 #       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
 #       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
 #
-#BSUB -o mm_batch_%J.out
+#BSUB -o mm_batch_poisson_gs_%J.out
 #BSUB -R "rusage[mem=2GB]"
 #BSUB -J poisson_gs
 #BSUB -q hpcintro
@@ -21,7 +21,7 @@
 
 lscpu
 
-echo "# N iters memory(kB) million_updates/sec"
+echo "# N iters memory(kB) million_updates/sec running_time"
 for N in `seq 5 5 150`; do
   ./poisson_gs $N 10000 .001 200
 done

@@ -11,9 +11,9 @@
 #       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
 #       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
 #
-#BSUB -o mm_batch_poisson_j_%J.out
+#BSUB -o mm_batch_1_%J.out
 #BSUB -R "rusage[mem=2GB]"
-#BSUB -J poisson_j
+#BSUB -J poisson_gs
 #BSUB -q hpcintro
 #BSUB -W 45
 #BSUB -R "select[model == XeonE5_2650v4]"
@@ -21,7 +21,11 @@
 
 lscpu
 
-echo "# N iters memory(kB) million_updates/sec running_time"
-for N in `seq 5 5 150`; do
-  ./poisson_j $N 10000 .001 200
-done
+export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
+export OMP_PROC_BIND=spread
+export OMP_PLACES=cores
+export OMP_WAIT_POLICY=active
+
+./poisson_gs 150 10000 .00001 200
+./poisson_gs 300 1000 .00001 200
+./poisson_gs 500 400 .00001 200
