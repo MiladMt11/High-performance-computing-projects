@@ -19,7 +19,6 @@
 # a whole CPU for itself (shared L3 cache)
 #BSUB -R "span[hosts=1] affinity[socket(1)]"
 
-nvidia-smi
 # Load the cuda module
 module load cuda/11.5.1
 module load gcc/10.3.0-binutils-2.36.1
