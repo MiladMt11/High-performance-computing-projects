@@ -209,7 +209,7 @@ void matmult_gpu1(int m, int n, int k, double* A_h, double* B_h, double* C_h)
 }
 
 
-__global__ void gpu2_kernel(int m, int n, int k, double* A, double* B, double* C, int bsx, int bsy)
+__global__ void gpu2_kernel(int m, int n, int k, double* A, double* B, double* C)
 {
     // A(m,k) m - # of rows; k - # of columns
     // B(k,n) k - # of rows; n - # of columns
@@ -222,6 +222,7 @@ __global__ void gpu2_kernel(int m, int n, int k, double* A, double* B, double* C
         return;
 
     double sum = 0.0;
+#pragma unroll
     for (int l = 0; l < k; l++)
         sum += A[threadRowID * k + l] * B[l * n + threadColID];
 
@@ -248,7 +249,7 @@ void matmult_gpu2(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     int bsy = (n + (bs - 1)) / bs;
     dim3 dimGrid(bsx, bsy, 1);
     dim3 dimBlock(bs, bs, 1);
-    gpu2_kernel << <dimGrid, dimBlock >> > (m, n, k, A_d, B_d, C_d, bsx, bsy);
+    gpu2_kernel << <dimGrid, dimBlock >> > (m, n, k, A_d, B_d, C_d);
     cudaDeviceSynchronize();
 
     // Copy result back to host
@@ -262,7 +263,7 @@ void matmult_gpu2(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaFree(C_d);
 }
 
-__global__ void gpu3_kernel(int m, int n, int k, double* A, double* B, double* C, int bsx, int bsy)
+__global__ void gpu3_kernel(int m, int n, int k, double* A, double* B, double* C)
 {
     // A(m,k) m - # of rows; k - # of columns
     // B(k,n) k - # of rows; n - # of columns
@@ -271,33 +272,34 @@ __global__ void gpu3_kernel(int m, int n, int k, double* A, double* B, double* C
     threadRowID = blockIdx.x * blockDim.x + threadIdx.x;
     threadColID = blockIdx.y * blockDim.y + threadIdx.y;
 
-    // TODO: very bad! fix it
-    if (threadColID >= n || threadRowID >= m || threadColID % 2 == 1)
+    if (threadColID >= n || threadRowID >= m)
         return;
 
-    double sum1 = 0.0;
-    double sum2 = 0.0;
-    for (int l = 0; l < k; l++)
-    {
-        sum1 += A[threadRowID * k + l] * B[l * n + threadColID];
-        sum2 += A[threadRowID * k + l] * B[l * n + threadColID + 1];
-    }
-    C[threadRowID * n + threadColID] = sum1;
-    C[threadRowID * n + threadColID + 1] = sum2;
+    // TODO: which one is better?
 
-    // TODO: very bad! fix it
-    // if (threadColID >= n || threadRowID >= m || threadRowID % 2 == 1)
-    //     return;
-
+    // int rid = threadRowID * 2;
     // double sum1 = 0.0;
     // double sum2 = 0.0;
+    // #pragma unroll
     // for (int l = 0; l < k; l++)
     // {
-    //     sum1 += A[threadRowID * k + l] * B[l * n + threadColID];
-    //     sum2 += A[(threadRowID + 1) * k + l] * B[l * n + threadColID];
+    //     sum1 += A[rid * k + l] * B[l * n + threadColID];
+    //     sum2 += A[(rid + 1) * k + l] * B[l * n + threadColID];
     // }
-    // C[threadRowID * n + threadColID] = sum1;
-    // C[(threadRowID + 1) * n + threadColID] = sum2;
+    // C[rid * n + threadColID] = sum1;
+    // C[(rid + 1) * n + threadColID] = sum2;
+
+    int cid = threadColID * 2;
+    double sum1 = 0.0;
+    double sum2 = 0.0;
+#pragma unroll
+    for (int l = 0; l < k; l++)
+    {
+        sum1 += A[threadRowID * k + l] * B[l * n + cid];
+        sum2 += A[threadRowID * k + l] * B[l * n + cid + 1];
+    }
+    C[threadRowID * n + cid] = sum1;
+    C[threadRowID * n + cid + 1] = sum2;
 }
 
 // The matrix sizes of A and B are m×k and k×n, respectively, so that C has size m×n
@@ -317,10 +319,10 @@ void matmult_gpu3(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     // Launch kernel and synchronize
     int bs = BLOCK_SIZE; // TODO: if bs too large, doesn't work for small matrices
     int bsx = (m + (bs - 1)) / bs;
-    int bsy = (n + (bs - 1)) / bs;
+    int bsy = (n / 2 + (bs - 1)) / bs;
     dim3 dimGrid(bsx, bsy, 1);
     dim3 dimBlock(bs, bs, 1);
-    gpu3_kernel << <dimGrid, dimBlock >> > (m, n, k, A_d, B_d, C_d, bsx, bsy);
+    gpu3_kernel << <dimGrid, dimBlock >> > (m, n, k, A_d, B_d, C_d);
     cudaDeviceSynchronize();
 
     // Copy result back to host
