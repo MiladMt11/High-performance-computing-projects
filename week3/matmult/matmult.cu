@@ -7,6 +7,7 @@
 #include <helper_cuda.h>
 
 #define min(X, Y) ((X) < (Y) ? (X) : (Y))
+#define max(X, Y) ((X) > (Y) ? (X) : (Y))
 #define BLOCK_SIZE 8
 
 extern "C"
@@ -272,7 +273,8 @@ __global__ void gpu3_kernel(int m, int n, int k, double* A, double* B, double* C
     threadRowID = blockIdx.x * blockDim.x + threadIdx.x;
     threadColID = blockIdx.y * blockDim.y + threadIdx.y;
 
-    if (threadColID >= n || threadRowID >= m)
+    int cid = threadColID * 2;
+    if (cid >= n || threadRowID >= m)
         return;
 
     // TODO: which one is better?
@@ -289,16 +291,12 @@ __global__ void gpu3_kernel(int m, int n, int k, double* A, double* B, double* C
     // C[rid * n + threadColID] = sum1;
     // C[(rid + 1) * n + threadColID] = sum2;
 
-    // TODO: still doens't work!
-    int cid = threadColID * 2;
-    if (cid + 2 > n)
+    if (n - cid == 1)
     {
         double sum = 0.0;
 #pragma unroll
         for (int l = 0; l < k; l++)
-        {
             sum += A[threadRowID * k + l] * B[l * n + cid];
-        }
         C[threadRowID * n + cid] = sum;
         return;
     }
@@ -331,8 +329,8 @@ void matmult_gpu3(int m, int n, int k, double* A_h, double* B_h, double* C_h)
 
     // Launch kernel and synchronize
     int bs = BLOCK_SIZE; // TODO: if bs too large, doesn't work for small matrices
-    int bsx = (m + (bs - 1)) / bs;
-    int bsy = (n / 2 + (bs - 1)) / bs;
+    int bsx = m / bs + 1;
+    int bsy = n / 2 / bs + 1;
     dim3 dimGrid(bsx, bsy, 1);
     dim3 dimBlock(bs, bs, 1);
     gpu3_kernel << <dimGrid, dimBlock >> > (m, n, k, A_d, B_d, C_d);
@@ -349,7 +347,7 @@ void matmult_gpu3(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaFree(C_d);
 }
 
-#define COMP_N_ELEMENTS 4
+#define COMP_N_ELEMENTS 2
 
 __global__ void gpu4_kernel(int m, int n, int k, double* A, double* B, double* C)
 {
@@ -360,36 +358,23 @@ __global__ void gpu4_kernel(int m, int n, int k, double* A, double* B, double* C
     threadRowID = blockIdx.x * blockDim.x + threadIdx.x;
     threadColID = blockIdx.y * blockDim.y + threadIdx.y;
 
-    if (threadColID >= n || threadRowID >= m)
+    int cid = threadColID * COMP_N_ELEMENTS;
+    if (cid >= n || threadRowID >= m)
         return;
 
     double sums[COMP_N_ELEMENTS] = { 0 }; int i;
-    int cid = threadColID * COMP_N_ELEMENTS;
-    if (cid + COMP_N_ELEMENTS > n)  // TODO: compute diff and do only those
-    {
-        int diff = n - cid;
-        for (int l = 0; l < k; l++)
-        {
-#pragma unroll
-            for (i = 0; i < diff; i++)
-                sums[i] += A[threadRowID * k + l] * B[l * n + (cid + i)];
-        }
-#pragma unroll
-        for (i = 0; i < diff; i++)
-            C[threadRowID * n + (cid + i)] = sums[i];
-        return;
-    }
-
+    int diff = n - cid;
+    int loop_count = min(COMP_N_ELEMENTS, diff);
 #pragma unroll
     for (int l = 0; l < k; l++)
     {
 #pragma unroll
-        for (i = 0; i < COMP_N_ELEMENTS; i++)
+        for (i = 0; i < loop_count; i++)
             sums[i] += A[threadRowID * k + l] * B[l * n + (cid + i)];
     }
 
 #pragma unroll
-    for (i = 0; i < COMP_N_ELEMENTS; i++)
+    for (i = 0; i < loop_count; i++)
         C[threadRowID * n + (cid + i)] = sums[i];
 }
 
@@ -409,8 +394,8 @@ void matmult_gpu4(int m, int n, int k, double* A_h, double* B_h, double* C_h)
 
     // Launch kernel and synchronize
     int bs = BLOCK_SIZE; // TODO: if bs too large, doesn't work for small matrices
-    int bsx = (m + (bs - 1)) / bs;
-    int bsy = ((n / COMP_N_ELEMENTS) + (bs - 1)) / bs;
+    int bsx = m / bs + 1;
+    int bsy = n / COMP_N_ELEMENTS / bs + 1;
     // printf("Grid: (%d,%d)\n",bsx,bsy);
     dim3 dimGrid(bsx, bsy, 1);
     dim3 dimBlock(bs, bs, 1);
