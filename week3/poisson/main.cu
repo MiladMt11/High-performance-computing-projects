@@ -11,6 +11,7 @@
 #include "omp_jacobi.h"
 #include "gpu_seq.h"
 #include "gpu_par.h"
+#include "gpu_par2.h"
 
 int
 main(int argc, char *argv[])
@@ -100,8 +101,15 @@ main(int argc, char *argv[])
         running_time = end - start;
     }
     else if (strcmp(method, "gpu_par2") == 0) {
-        printf("%s is not yet implemented.\n", method);
-        ret = 1;
+        if (devices < 2) {
+            printf("Error: Only one GPU is available.\n");
+            ret = 1;
+        } else {
+            double start = omp_get_wtime();
+            iters = gpu_par2(N, iter_max, u_h);
+            double end = omp_get_wtime();
+            running_time = end - start;
+        }
     }
     else if (strcmp(method, "gpu_norm") == 0) {
         printf("%s is not yet implemented.\n", method);
@@ -110,6 +118,16 @@ main(int argc, char *argv[])
         printf("No such implementation %s.\n", method);
         ret = 1;
     }
+
+    double sum = 0.0;
+    for (int i = 1; i < N + 1; ++i) {
+        for (int j = 1; j < N + 1; ++j) {
+            for (int k = 1; k < N + 1; ++k) {
+                sum += u_h[i][j][k];
+            }
+        }
+    }
+    printf("SUM: %f\n", sum);
 
     double bytes_alloc = sizeof(double) * (double) nElms;
     double flops_per_sec = (8 * iters * (double) nElms) / running_time;
