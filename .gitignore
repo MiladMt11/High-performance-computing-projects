@@ -7,3 +7,4 @@ note
 *.studio
 Makefile.gcc
 matmult_f.gcc
+.editorconfig
