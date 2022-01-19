@@ -1,0 +1,2 @@
+echo -e '\tkB Mflop/s diff'
+matmult_f.nvcc gpu1 50 60 70
