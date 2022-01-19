@@ -21,7 +21,6 @@
 #BSUB -R "select[model == XeonE5_2660v3]"
 #BSUB -n 16 -R "span[hosts=1]"
 
-nvidia-smi
 # Load the cuda module
 module load cuda/11.5.1
 module load gcc/10.3.0-binutils-2.36.1
