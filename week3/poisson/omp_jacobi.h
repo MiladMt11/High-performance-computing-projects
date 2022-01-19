@@ -11,7 +11,6 @@ int cpu_jacobi_norm(
 int cpu_jacobi_nonorm(
     int N,
     int iter_max,
-    double tolerance,
     double ***u
 );
 

@@ -9,6 +9,7 @@
 #include "transfer3d_gpu.h"
 
 #include "omp_jacobi.h"
+#include "gpu_seq.h"
 
 int
 main(int argc, char *argv[])
@@ -75,7 +76,7 @@ main(int argc, char *argv[])
     double running_time;
     if (strcmp(method, "cpu_nonorm") == 0) {
         double start = omp_get_wtime();
-        iters = cpu_jacobi_nonorm(N, iter_max, tolerance, u_h);
+        iters = cpu_jacobi_nonorm(N, iter_max, u_h);
         double end = omp_get_wtime();
         running_time = end - start;
     }
@@ -86,8 +87,10 @@ main(int argc, char *argv[])
         running_time = end - start;
     }
     else if (strcmp(method, "gpu_seq") == 0) {
-        printf("%s is not yet implemented.\n", method);
-        ret = 1;
+        double start = omp_get_wtime();
+        iters = gpu_seq(N, iter_max, u_h);
+        double end = omp_get_wtime();
+        running_time = end - start;
     }
     else if (strcmp(method, "gpu_par") == 0) {
         printf("%s is not yet implemented.\n", method);
