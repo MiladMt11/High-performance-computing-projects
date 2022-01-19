@@ -1,2 +1,3 @@
 echo -e '\tkB Mflop/s diff'
-matmult_f.nvcc gpu1 50 60 70
+# params: m n k
+matmult_f.nvcc ${1:-nat} 300 400 70
