@@ -214,45 +214,15 @@ __global__ void gpu2_kernel(int m, int n, int k, double* A, double* B, double* C
     // A(m,k) m - # of rows; k - # of columns
     // B(k,n) k - # of rows; n - # of columns
     // C(m,n) m - # of rows; n - # of columns
-
-    // int i = blockIdx.x * blockDim.x + threadIdx.x;
-    // int j = blockIdx.y * blockDim.y + threadIdx.y;
-
     int threadRowID, threadColID;
     threadRowID = blockIdx.x * blockDim.x + threadIdx.x;
     threadColID = blockIdx.y * blockDim.y + threadIdx.y;
 
-    // /* ------------------------------------
-    //    Print the thread's 2 dim grid ID
-    //    ------------------------------------ */
-    // printf("Blk: (%d,%d) Thread: (%d,%d) -> Row/Col = (%d,%d)\n",
-    //     blockIdx.x, blockIdx.y,
-    //     threadIdx.x, threadIdx.y,
-    //     threadRowID, threadColID);
-
-    // if (i * j >= m * n)
-    //     return;
     if (threadColID >= n || threadRowID >= m)
         return;
 
-    // if (i * j > 3000)
-    // {
-    // }
-
     for (int l = 0; l < k; l++)
         C[threadRowID * n + threadColID] += A[threadRowID * k + l] * B[l * n + threadColID];
-
-    // int i, j, l;
-    // for (i = 0; i < m; i++)
-    // {
-    //     for (l = 0; l < k; l++)
-    //     {
-    //         for (j = 0; j < n; j++)
-    //         {
-    //             C[i * n + j] += A[i * k + l] * B[l * n + j];
-    //         }
-    //     }
-    // }
 }
 
 // The matrix sizes of A and B are m×k and k×n, respectively, so that C has size m×n
