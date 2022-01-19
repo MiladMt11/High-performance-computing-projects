@@ -13,7 +13,8 @@ int jacobi(
     int N,
     int iter_max,
     double tolerance,
-    double ****u)
+    double ****u,
+    double *loop_time)
 {
     int iter;
     double ***u1, ***u2;
@@ -38,7 +39,7 @@ int jacobi(
 #elif defined(_JACOBI_OMP_V2)
 #pragma omp parallel for schedule(runtime)
 #endif
-    for (int i = 0; i < N + 2; ++i) // Copy over boundary conditions.
+    for (int i = 0; i < N + 2; ++i) // Copy over initial conditions.
     {
         for (int j = 0; j < N + 2; ++j)
         {
@@ -50,6 +51,8 @@ int jacobi(
         }
     }
 
+
+    double start = omp_get_wtime();
     for (iter = 0; iter < iter_max; ++iter)
     {
         double norm = 0.0;
@@ -73,6 +76,9 @@ int jacobi(
                 double y = -1.0 + (j * delta);
                 for (int k = 1; k < N + 1; ++k)
                 {
+                    // long long kdiff;
+                    // kdiff = &u1[i][j - 1][k] - &u1[i][j - 1][k + 1];
+                    // printf("%lld\n", kdiff);
                     double z = -1.0 + (k * delta);
                     double sum =
                         u1[i - 1][j][k] +
@@ -102,6 +108,8 @@ int jacobi(
         u2 = u1;
         u1 = utmp;
     }
+    double end = omp_get_wtime();
+    *loop_time = end - start;
 
     // copy
     for (int i = 0; i < N + 2; ++i)

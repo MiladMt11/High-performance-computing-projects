@@ -87,9 +87,10 @@ main(int argc, char *argv[]) {
     }
 
     int iters;
-    double start = omp_get_wtime(); 
+    double loop_time = 0.0;
+    double start = omp_get_wtime();
     #ifdef _JACOBI
-    iters = jacobi(N, iter_max, tolerance, &u);
+    iters = jacobi(N, iter_max, tolerance, &u, &loop_time);
     #endif
     #ifdef _GAUSS_SEIDEL_H
     iters = gauss_seidel(N, iter_max, tolerance, u);
@@ -104,9 +105,9 @@ main(int argc, char *argv[]) {
     #endif
 
     double running_time = end - start;
-    double updates_per_sec = (iters * dN*dN*dN) / running_time;
+    double updates_per_sec = (iters * dN*dN*dN) / loop_time;
 
-    printf("%d %d %f %f %f\n", N, iters, bytes_alloc / 1e3, updates_per_sec / 1e6, running_time);
+    printf("%d %d %f %f %f %f\n", N, iters, bytes_alloc / 1e3, updates_per_sec / 1e6, running_time, loop_time);
 
 #if CHECK_CORRECTNESS
     double delta = 2.0 / (double) (N+2);

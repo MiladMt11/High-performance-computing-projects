@@ -11,7 +11,8 @@ int jacobi(
     int N,
     int iter_max,
     double tolerance,
-    double ****u
+    double ****u,
+    double *loop_time
 );
 
 #endif
