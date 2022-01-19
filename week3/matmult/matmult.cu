@@ -191,7 +191,7 @@ void matmult_gpu1(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     // Transfer data
     cudaMemcpy(A_d, A_h, m * k * sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(B_d, B_h, k * n * sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemset(C_d, 0, m * n * sizeof(int));
+    cudaMemset(C_d, 0, m * n * sizeof(double));
 
     // Launch kernel and synchronize
     gpu1_kernel << <1, 1 >> > (m, n, k, A_d, B_d, C_d);
@@ -241,7 +241,7 @@ void matmult_gpu2(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     // Transfer data
     cudaMemcpy(A_d, A_h, m * k * sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(B_d, B_h, k * n * sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemset(C_d, 0, m * n * sizeof(int));
+    cudaMemset(C_d, 0, m * n * sizeof(double));
 
     // Launch kernel and synchronize
     int bs = BLOCK_SIZE; // TODO: if bs too large, doesn't work for small matrices
@@ -289,7 +289,20 @@ __global__ void gpu3_kernel(int m, int n, int k, double* A, double* B, double* C
     // C[rid * n + threadColID] = sum1;
     // C[(rid + 1) * n + threadColID] = sum2;
 
+    // TODO: still doens't work!
     int cid = threadColID * 2;
+    if (cid + 2 > n)
+    {
+        double sum = 0.0;
+#pragma unroll
+        for (int l = 0; l < k; l++)
+        {
+            sum += A[threadRowID * k + l] * B[l * n + cid];
+        }
+        C[threadRowID * n + cid] = sum;
+        return;
+    }
+
     double sum1 = 0.0;
     double sum2 = 0.0;
 #pragma unroll
@@ -314,7 +327,7 @@ void matmult_gpu3(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     // Transfer data
     cudaMemcpy(A_d, A_h, m * k * sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(B_d, B_h, k * n * sizeof(double), cudaMemcpyHostToDevice);
-    cudaMemset(C_d, 0, m * n * sizeof(int));
+    cudaMemset(C_d, 0, m * n * sizeof(double));
 
     // Launch kernel and synchronize
     int bs = BLOCK_SIZE; // TODO: if bs too large, doesn't work for small matrices
@@ -323,6 +336,85 @@ void matmult_gpu3(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     dim3 dimGrid(bsx, bsy, 1);
     dim3 dimBlock(bs, bs, 1);
     gpu3_kernel << <dimGrid, dimBlock >> > (m, n, k, A_d, B_d, C_d);
+    cudaDeviceSynchronize();
+
+    // Copy result back to host
+    cudaMemcpy(A_h, A_d, m * k * sizeof(double), cudaMemcpyDeviceToHost);
+    cudaMemcpy(B_h, B_d, k * n * sizeof(double), cudaMemcpyDeviceToHost);
+    cudaMemcpy(C_h, C_d, m * n * sizeof(double), cudaMemcpyDeviceToHost);
+
+    // Free A_d, B_d, C_d
+    cudaFree(A_d);
+    cudaFree(B_d);
+    cudaFree(C_d);
+}
+
+#define COMP_N_ELEMENTS 4
+
+__global__ void gpu4_kernel(int m, int n, int k, double* A, double* B, double* C)
+{
+    // A(m,k) m - # of rows; k - # of columns
+    // B(k,n) k - # of rows; n - # of columns
+    // C(m,n) m - # of rows; n - # of columns
+    int threadRowID, threadColID;
+    threadRowID = blockIdx.x * blockDim.x + threadIdx.x;
+    threadColID = blockIdx.y * blockDim.y + threadIdx.y;
+
+    if (threadColID >= n || threadRowID >= m)
+        return;
+
+    double sums[COMP_N_ELEMENTS] = { 0 }; int i;
+    int cid = threadColID * COMP_N_ELEMENTS;
+    if (cid + COMP_N_ELEMENTS > n)  // TODO: compute diff and do only those
+    {
+        int diff = n - cid;
+        for (int l = 0; l < k; l++)
+        {
+#pragma unroll
+            for (i = 0; i < diff; i++)
+                sums[i] += A[threadRowID * k + l] * B[l * n + (cid + i)];
+        }
+#pragma unroll
+        for (i = 0; i < diff; i++)
+            C[threadRowID * n + (cid + i)] = sums[i];
+        return;
+    }
+
+#pragma unroll
+    for (int l = 0; l < k; l++)
+    {
+#pragma unroll
+        for (i = 0; i < COMP_N_ELEMENTS; i++)
+            sums[i] += A[threadRowID * k + l] * B[l * n + (cid + i)];
+    }
+
+#pragma unroll
+    for (i = 0; i < COMP_N_ELEMENTS; i++)
+        C[threadRowID * n + (cid + i)] = sums[i];
+}
+
+// The matrix sizes of A and B are m×k and k×n, respectively, so that C has size m×n
+void matmult_gpu4(int m, int n, int k, double* A_h, double* B_h, double* C_h)
+{
+    // Allocate A_d, B_d, C_d
+    double* A_d, * B_d, * C_d;
+    cudaMalloc((void**)&A_d, m * k * sizeof(double));
+    cudaMalloc((void**)&B_d, k * n * sizeof(double));
+    cudaMalloc((void**)&C_d, m * n * sizeof(double));
+
+    // Transfer data
+    cudaMemcpy(A_d, A_h, m * k * sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(B_d, B_h, k * n * sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemset(C_d, 0, m * n * sizeof(double));
+
+    // Launch kernel and synchronize
+    int bs = BLOCK_SIZE; // TODO: if bs too large, doesn't work for small matrices
+    int bsx = (m + (bs - 1)) / bs;
+    int bsy = ((n / COMP_N_ELEMENTS) + (bs - 1)) / bs;
+    // printf("Grid: (%d,%d)\n",bsx,bsy);
+    dim3 dimGrid(bsx, bsy, 1);
+    dim3 dimBlock(bs, bs, 1);
+    gpu4_kernel << < dimGrid, dimBlock >> > (m, n, k, A_d, B_d, C_d);
     cudaDeviceSynchronize();
 
     // Copy result back to host
