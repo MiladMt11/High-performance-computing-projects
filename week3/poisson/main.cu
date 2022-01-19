@@ -26,11 +26,7 @@ main(int argc, char *argv[])
     int devices = 0;
     if (needs_gpu) {
         cudaError_t err = cudaGetDeviceCount(&devices);
-        if (err != cudaSuccess) {
-            printf("Error: Unable to get number of GPUs.\n");
-            return 1;
-        }
-        if (devices == 0) {
+        if (err != cudaSuccess || devices == 0) {
             printf("Error: This machine doesn't have a GPU.\n");
             return 1;
         }
