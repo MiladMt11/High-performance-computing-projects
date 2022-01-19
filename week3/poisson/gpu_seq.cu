@@ -63,5 +63,8 @@ int gpu_seq(int N, int iter_max, double ***u_h) {
 
     transfer_3d(u_h, ulast_d, N+2, N+2, N+2, cudaMemcpyDeviceToHost);
 
+    free_gpu(u1_d);
+    free_gpu(u2_d);
+
     return iter;
 }

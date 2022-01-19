@@ -10,6 +10,7 @@
 
 #include "omp_jacobi.h"
 #include "gpu_seq.h"
+#include "gpu_par.h"
 
 int
 main(int argc, char *argv[])
@@ -93,8 +94,10 @@ main(int argc, char *argv[])
         running_time = end - start;
     }
     else if (strcmp(method, "gpu_par") == 0) {
-        printf("%s is not yet implemented.\n", method);
-        ret = 1;
+        double start = omp_get_wtime();
+        iters = gpu_par(N, iter_max, u_h);
+        double end = omp_get_wtime();
+        running_time = end - start;
     }
     else if (strcmp(method, "gpu_par2") == 0) {
         printf("%s is not yet implemented.\n", method);
