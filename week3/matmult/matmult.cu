@@ -11,7 +11,7 @@ extern "C" {
 
 #define min(X, Y) ((X) < (Y) ? (X) : (Y))
 #define max(X, Y) ((X) > (Y) ? (X) : (Y))
-#define BLOCK_SIZE 32
+#define BLOCK_SIZE 16
 
 extern "C"
 {; // just for Ernie's IDE indentation config, please don't remove it :)
@@ -233,7 +233,7 @@ void matmult_gpu1(int m, int n, int k, double* A_h, double* B_h, double* C_h)
 #ifdef TIME_TRANSFER
     te = omp_get_wtime();
     printf("GPU => CPU: %f\n", te - ts);
-    printf("Total perc of runtime: %f\n", (diff + (ts - ts))/runtime * 100);
+    printf("Total perc of runtime: %f\n", (diff + (ts - ts)) / runtime * 100);
 #endif
 }
 
@@ -273,7 +273,7 @@ void matmult_gpu2(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaMemset(C_d, 0, m * n * sizeof(double));
 
     // Launch kernel and synchronize
-    int bs = BLOCK_SIZE; // TODO: if bs too large, doesn't work for small matrices
+    int bs = BLOCK_SIZE;
     int bsx = (m + (bs - 1)) / bs;
     int bsy = (n + (bs - 1)) / bs;
     dim3 dimGrid(bsx, bsy, 1);
@@ -292,6 +292,8 @@ void matmult_gpu2(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaFree(C_d);
 }
 
+#define SUM_OVER_ROWS 0
+
 __global__ void gpu3_kernel(int m, int n, int k, double* A, double* B, double* C)
 {
     // A(m,k) m - # of rows; k - # of columns
@@ -301,23 +303,35 @@ __global__ void gpu3_kernel(int m, int n, int k, double* A, double* B, double* C
     threadRowID = blockIdx.x * blockDim.x + threadIdx.x;
     threadColID = blockIdx.y * blockDim.y + threadIdx.y;
 
+#if SUM_OVER_ROWS
+    int rid = threadRowID * 2;
+    if (threadColID >= n || rid >= m)
+        return;
+
+    if (m - rid == 1)
+    {
+        double sum = 0.0;
+#pragma unroll
+        for (int l = 0; l < k; l++)
+            sum += A[rid * k + l] * B[l * n + threadColID];
+        C[rid * n + threadColID] = sum;
+        return;
+    }
+
+    double sum1 = 0.0;
+    double sum2 = 0.0;
+#pragma unroll
+    for (int l = 0; l < k; l++)
+    {
+        sum1 += A[rid * k + l] * B[l * n + threadColID];
+        sum2 += A[(rid + 1) * k + l] * B[l * n + threadColID];
+    }
+    C[rid * n + threadColID] = sum1;
+    C[(rid + 1) * n + threadColID] = sum2;
+#else
     int cid = threadColID * 2;
     if (cid >= n || threadRowID >= m)
         return;
-
-    // TODO: which one is better?
-
-    // int rid = threadRowID * 2;
-    // double sum1 = 0.0;
-    // double sum2 = 0.0;
-    // #pragma unroll
-    // for (int l = 0; l < k; l++)
-    // {
-    //     sum1 += A[rid * k + l] * B[l * n + threadColID];
-    //     sum2 += A[(rid + 1) * k + l] * B[l * n + threadColID];
-    // }
-    // C[rid * n + threadColID] = sum1;
-    // C[(rid + 1) * n + threadColID] = sum2;
 
     if (n - cid == 1)
     {
@@ -339,6 +353,7 @@ __global__ void gpu3_kernel(int m, int n, int k, double* A, double* B, double* C
     }
     C[threadRowID * n + cid] = sum1;
     C[threadRowID * n + cid + 1] = sum2;
+#endif
 }
 
 // The matrix sizes of A and B are m×k and k×n, respectively, so that C has size m×n
@@ -356,9 +371,14 @@ void matmult_gpu3(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaMemset(C_d, 0, m * n * sizeof(double));
 
     // Launch kernel and synchronize
-    int bs = BLOCK_SIZE; // TODO: if bs too large, doesn't work for small matrices
+    int bs = BLOCK_SIZE;
+#if SUM_OVER_ROWS
+    int bsx = m / 2 / bs + 1;
+    int bsy = n / bs + 1;
+#else
     int bsx = m / bs + 1;
     int bsy = n / 2 / bs + 1;
+#endif
     dim3 dimGrid(bsx, bsy, 1);
     dim3 dimBlock(bs, bs, 1);
     gpu3_kernel << <dimGrid, dimBlock >> > (m, n, k, A_d, B_d, C_d);
@@ -375,7 +395,7 @@ void matmult_gpu3(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaFree(C_d);
 }
 
-#define COMP_N_ELEMENTS 2
+#define COMP_N_ELEMENTS 64
 
 __global__ void gpu4_kernel(int m, int n, int k, double* A, double* B, double* C)
 {
@@ -421,7 +441,7 @@ void matmult_gpu4(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaMemset(C_d, 0, m * n * sizeof(double));
 
     // Launch kernel and synchronize
-    int bs = BLOCK_SIZE; // TODO: if bs too large, doesn't work for small matrices
+    int bs = BLOCK_SIZE;
     int bsx = m / bs + 1;
     int bsy = n / COMP_N_ELEMENTS / bs + 1;
     // printf("Grid: (%d,%d)\n",bsx,bsy);
@@ -465,30 +485,19 @@ __global__ void gpu5_kernel(int m, int n, int k, double* A, double* B, double* C
     // Multiply each pair of sub-matrices together
     // and accumulate the results
     for (int i = 0; i < (k / SHARED_BLOCK_SIZE); ++i) {
-
         double* Asub = &A[k * SHARED_BLOCK_SIZE * blockRow + SHARED_BLOCK_SIZE * i];
-
-        // Get sub-matrix Asub of A
-        // Matrix Asub = GetSubMatrix(A, blockRow, i);
-
         double* Bsub = &B[n * SHARED_BLOCK_SIZE * i + SHARED_BLOCK_SIZE * blockCol];
-
-        // Get sub-matrix Bsub of B
-        // Matrix Bsub = GetSubMatrix(B, i, blockCol);
 
         // Shared memory used to store Asub and Bsub respectively
         __shared__ double Ash[SHARED_BLOCK_SIZE][SHARED_BLOCK_SIZE];
         __shared__ double Bsh[SHARED_BLOCK_SIZE][SHARED_BLOCK_SIZE];
 
-        // return A.elements[row * A.stride + col];
-        // Ash[row][col] = GetElement(Asub, row, col);
         Ash[row][col] = Asub[row * k + col];
-        // Bsh[row][col] = GetElement(Bsub, row, col);
         Bsh[row][col] = Bsub[row * n + col];
-
         // Synchronize to make sure the sub-matrices are loaded
         // before starting the computation
         __syncthreads();
+
         // Multiply Asub and Bsub together
         for (int e = 0; e < SHARED_BLOCK_SIZE; ++e)
             Cvalue += Ash[row][e] * Bsh[e][col];
@@ -504,7 +513,6 @@ __global__ void gpu5_kernel(int m, int n, int k, double* A, double* B, double* C
     // SetElement(Csub, row, col, Cvalue);
     Csub_ptr[row * n + col] = Cvalue;
 }
-
 
 // Matrices are stored in row-major order:
 // M(row, col) = *(M.elements + row * M.stride + col)
