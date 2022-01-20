@@ -30,7 +30,7 @@ S="2048 2048 2048"
 
 # define the permutation type in PERM
 #
-PERM="gpulib"
+PERM="gpu2"
 
 # define executable
 EXECUTABLE=../matmult_f.nvcc
