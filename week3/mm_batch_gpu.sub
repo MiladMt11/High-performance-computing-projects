@@ -14,7 +14,7 @@
 ### -- Select the resources: for jobs using 2 GPUs use num=2
 #BSUB -gpu "num=1:mode=exclusive_process"
 #BSUB -W 1:00
-#BSUB -R "select[model == XeonE5_2660v3]"
+##BSUB -R "select[model == XeonE5_2660v3]"
 # uncomment the following line, if you want to assure that your job has
 # a whole CPU for itself (shared L3 cache)
 #BSUB -R "span[hosts=1] affinity[socket(1)]"
@@ -31,11 +31,11 @@ EXECUTABLE=matmult_f.nvcc
 
 # define the mkn values in the MKN variable
 #
-SIZES="100 196 384 753 1476 2893 5669 11112 21780 42688"
+SIZES="100"
 
 # define the permutation type in PERM
 #
-PERM="mkn"
+PERM="gpu1"
 
 # uncomment and set a reasonable BLKSIZE for the blk version
 #
