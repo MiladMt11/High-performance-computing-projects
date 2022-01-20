@@ -1,0 +1,121 @@
+Loaded module: cuda/11.5.1
+Loaded module: gcc/10.3.0-binutils-2.36.1
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                32
+On-line CPU(s) list:   0-31
+Thread(s) per core:    1
+Core(s) per socket:    16
+Socket(s):             2
+NUMA node(s):          2
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 85
+Model name:            Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz
+Stepping:              7
+CPU MHz:               2900.000
+BogoMIPS:              5800.00
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              1024K
+L3 cache:              22528K
+NUMA node0 CPU(s):     0-15
+NUMA node1 CPU(s):     16-31
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 cdp_l3 invpcid_single intel_ppin intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm arat pln pts hwp_epp pku ospke avx512_vnni md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+cpu_nonorm 40 100000 512.000000 41751.740730 1.226296
+cpu_nonorm 50 100000 1000.000000 53111.457373 1.882833
+cpu_nonorm 60 100000 1728.000000 63553.610456 2.718964
+cpu_nonorm 70 100000 2744.000000 58868.127862 4.661266
+cpu_nonorm 80 100000 4096.000000 68235.409629 6.002748
+cpu_nonorm 90 100000 5832.000000 67341.858829 8.660290
+cpu_nonorm 100 100000 8000.000000 64535.585465 12.396262
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 12350853: <mm_cpu_nonorm> in cluster <dcc> Done
+
+Job <mm_cpu_nonorm> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Thu Jan 20 13:17:48 2022
+Job was executed on host(s) <12*n-62-11-60>, in queue <hpc>, as user <s200770> in cluster <dcc> at Thu Jan 20 13:17:49 2022
+</zhome/7e/c/151330> was used as the home directory.
+</zhome/7e/c/151330/hpc/week3_poisson/jobs> was used as the working directory.
+Started at Thu Jan 20 13:17:49 2022
+Terminated at Thu Jan 20 13:18:27 2022
+Results reported at Thu Jan 20 13:18:27 2022
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+# 02614 - High-Performance Computing, January 2022
+# 
+# batch script to run collect on a decidated server in the hpcintro
+# queue
+#
+# Author: Bernd Dammann <bd@cc.dtu.dk>
+#
+# Note: to get more cores, change the n value below to the
+#       number of cores you want to use.  Later on, use the
+#       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
+#       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
+#
+#BSUB -o mm_cpu_nonorm_small_%J.out
+#BSUB -R "rusage[mem=2GB]"
+#BSUB -J mm_cpu_nonorm
+#BSUB -q hpc
+#BSUB -W 30
+#BSUB -R "select[model == XeonGold6226R]"
+#BSUB -n 12 -R "span[hosts=1]"
+
+# Load the cuda module
+module load cuda/11.5.1
+module load gcc/10.3.0-binutils-2.36.1
+
+# set some OpenMP variables here
+#
+# no. of threads
+export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
+#
+# keep idle threads spinning (needed to monitor idle times!)
+export OMP_WAIT_POLICY=active
+#
+# if you use a runtime schedule, define it below
+# export OMP_DISPLAY_ENV=verbose
+
+# check these?
+# export OMP_PLACES=numa_domains
+# export $VAR=spread
+# export OMP_DISPLAY_AFFINITY=verbose
+
+# experiment name 
+#
+JID=${LSB_JOBID}
+
+# start the collect command with the above settings
+lscpu
+../main cpu_nonorm 40 100000 .01 20
+../main cpu_nonorm 50 100000 .01 20
+../main cpu_nonorm 60 100000 .01 20
+
+(... more ...)
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   450.13 sec.
+    Max Memory :                                 17 MB
+    Average Memory :                             17.00 MB
+    Total Requested Memory :                     24576.00 MB
+    Delta Memory :                               24559.00 MB
+    Max Swap :                                   6 MB
+    Max Processes :                              4
+    Max Threads :                                16
+    Run time :                                   70 sec.
+    Turnaround time :                            39 sec.
+
+The output (if any) is above this job summary.
+

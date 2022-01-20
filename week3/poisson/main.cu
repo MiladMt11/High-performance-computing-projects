@@ -14,13 +14,14 @@
 #include "gpu_seq.h"
 #include "gpu_par.h"
 #include "gpu_par2.h"
+#include "gpu_par_f.h"
 #include "gpu_norm.h"
 
 int
 main(int argc, char *argv[])
 {
     if (argc != 6) {
-        printf("Usage: %s [cpu_nonorm,cpu_norm,gpu_seq,gpu_par,gpu_par2,gpu_norm] "
+        printf("Usage: %s [cpu_nonorm,cpu_norm,gpu_seq,gpu_par,gpu_par_f,gpu_par2,gpu_norm] "
                "N max_iters tolerance start_temp\n", argv[0]);
         return 1;
     }
@@ -107,6 +108,32 @@ main(int argc, char *argv[])
         iters = gpu_par(N, iter_max, u_h);
         double end = omp_get_wtime();
         running_time = end - start;
+    }
+    else if (strcmp(method, "gpu_par_f") == 0) {
+        double ***f_h = NULL;
+        if ( (f_h = d_malloc_3d(N+2, N+2, N+2)) == NULL ) {
+            perror("array f_h: allocation failed");
+            exit(-1);
+        }
+        double delta = 2.0 / (double)(N + 2);
+        double delta2 = delta * delta;
+        for (int i = 0; i < N+2; ++i) {
+            for (int j = 0; j < N+2; ++j) {
+                for (int k = 0; k < N+2; ++k) {
+                    double x = -1.0 + (i * delta);
+                    double y = -1.0 + (j * delta);
+                    double z = -1.0 + (k * delta);
+                    f_h[i][j][k] = (x <= -0.375 && y <= -0.5 && -(2.0 / 3.0) <= z) ? 200.0 : 0.0;
+                }
+            }
+        }
+
+        double start = omp_get_wtime();
+        iters = gpu_par_f(N, iter_max, u_h, f_h);
+        double end = omp_get_wtime();
+        running_time = end - start;
+
+        free(f_h);
     }
     else if (strcmp(method, "gpu_par2") == 0) {
         if (devices < 2) {
