@@ -7,6 +7,7 @@ extern "C" {
 #include <cuda_runtime.h>
 #include "cublas_v2.h"
 #include <helper_cuda.h>
+#include <omp.h>
 
 #define min(X, Y) ((X) < (Y) ? (X) : (Y))
 #define max(X, Y) ((X) > (Y) ? (X) : (Y))
@@ -182,9 +183,14 @@ __global__ void gpu1_kernel(int m, int n, int k, double* A, double* B, double* C
     }
 }
 
+#define TIME_TRANSFER 1
+
 // The matrix sizes of A and B are m×k and k×n, respectively, so that C has size m×n
 void matmult_gpu1(int m, int n, int k, double* A_h, double* B_h, double* C_h)
 {
+#ifdef TIME_TRANSFER
+    double ts = omp_get_wtime();
+#endif
     // Allocate A_d, B_d, C_d
     double* A_d, * B_d, * C_d;
     cudaMalloc((void**)&A_d, m * k * sizeof(double));
@@ -195,11 +201,26 @@ void matmult_gpu1(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaMemcpy(A_d, A_h, m * k * sizeof(double), cudaMemcpyHostToDevice);
     cudaMemcpy(B_d, B_h, k * n * sizeof(double), cudaMemcpyHostToDevice);
     cudaMemset(C_d, 0, m * n * sizeof(double));
+#ifdef TIME_TRANSFER
+    double te = omp_get_wtime();
+    double diff = te - ts;
+    printf("CPU => GPU: %f\n", te - ts);
+#endif
 
+#ifdef TIME_TRANSFER
+    ts = omp_get_wtime();
+#endif
     // Launch kernel and synchronize
     gpu1_kernel << <1, 1 >> > (m, n, k, A_d, B_d, C_d);
     cudaDeviceSynchronize();
+#ifdef TIME_TRANSFER
+    te = omp_get_wtime();
+    double runtime = te - ts;
+#endif
 
+#ifdef TIME_TRANSFER
+    ts = omp_get_wtime();
+#endif
     // Copy result back to host
     cudaMemcpy(A_h, A_d, m * k * sizeof(double), cudaMemcpyDeviceToHost);
     cudaMemcpy(B_h, B_d, k * n * sizeof(double), cudaMemcpyDeviceToHost);
@@ -209,6 +230,11 @@ void matmult_gpu1(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaFree(A_d);
     cudaFree(B_d);
     cudaFree(C_d);
+#ifdef TIME_TRANSFER
+    te = omp_get_wtime();
+    printf("GPU => CPU: %f\n", te - ts);
+    printf("Total perc of runtime: %f\n", (diff + (ts - ts))/runtime * 100);
+#endif
 }
 
 
