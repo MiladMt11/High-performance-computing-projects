@@ -22,7 +22,7 @@ export TMPDIR=$__LSF_JOB_TMPDIR__
 module load cuda/11.5.1
 module load gcc/10.3.0-binutils-2.36.1
 
-export MFLOPS_MAX_IT=0
+export MFLOPS_MAX_IT=1
 
 # define the mkn values in the MKN variable
 #
