@@ -183,7 +183,7 @@ __global__ void gpu1_kernel(int m, int n, int k, double* A, double* B, double* C
     }
 }
 
-#define TIME_TRANSFER 1
+#define TIME_TRANSFER 0
 
 // The matrix sizes of A and B are m×k and k×n, respectively, so that C has size m×n
 void matmult_gpu1(int m, int n, int k, double* A_h, double* B_h, double* C_h)
