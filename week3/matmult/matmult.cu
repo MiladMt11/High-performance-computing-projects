@@ -662,4 +662,36 @@ void matmult_gpu5(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaFree(C_d);
 }
 
+
+// The matrix sizes of A and B are m×k and k×n, respectively, so that C has size m×n
+void matmult_gpulib(int m, int n, int k, double* A_h, double* B_h, double* C_h)
+{
+    // Allocate A_d, B_d, C_d
+    double* A_d, * B_d, * C_d;
+    cudaMalloc((void**)&A_d, m * k * sizeof(double));
+    cudaMalloc((void**)&B_d, k * n * sizeof(double));
+    cudaMalloc((void**)&C_d, m * n * sizeof(double));
+
+    // Transfer data
+    cudaMemcpy(A_d, A_h, m * k * sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemcpy(B_d, B_h, k * n * sizeof(double), cudaMemcpyHostToDevice);
+    cudaMemset(C_d, 0, m * n * sizeof(double));
+
+    cublasStatus_t stat;
+    cublasHandle_t handle;
+    stat = cublasCreate(&handle);
+
+    const double alpha = 1.0;
+    const double beta = 0.0;
+    cublasDgemm(handle, CUBLAS_OP_N, CUBLAS_OP_N, n, m, k, &alpha, B_d, n, A_d, k, &beta, C_d, n);
+
+    cudaMemcpy(C_h, C_d, m * n * sizeof(double), cudaMemcpyDeviceToHost);
+
+    cublasDestroy(handle); // destroy CUBLAS context
+    cudaFree(A_d);
+    cudaFree(B_d);
+    cudaFree(C_d);
+}
+
+
 }
