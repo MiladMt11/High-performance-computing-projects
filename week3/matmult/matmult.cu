@@ -413,6 +413,8 @@ void matmult_gpu4(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaFree(C_d);
 }
 
+#define SHARED_BLOCK_SIZE 32
+
 // The matrix sizes of A and B are m×k and k×n, respectively, so that C has size m×n
 __global__ void gpu5_kernel(int m, int n, int k, double* A, double* B, double* C)
 {
@@ -420,7 +422,7 @@ __global__ void gpu5_kernel(int m, int n, int k, double* A, double* B, double* C
     int blockRow = blockIdx.y;
     int blockCol = blockIdx.x;
 
-    double* Csub_ptr = &C[n * BLOCK_SIZE * blockRow + BLOCK_SIZE * blockCol];
+    double* Csub_ptr = &C[n * SHARED_BLOCK_SIZE * blockRow + SHARED_BLOCK_SIZE * blockCol];
 
     // Each thread computes one element of Csub
     // by accumulating results into Cvalue
@@ -434,24 +436,21 @@ __global__ void gpu5_kernel(int m, int n, int k, double* A, double* B, double* C
     // required to compute Csub
     // Multiply each pair of sub-matrices together
     // and accumulate the results
-    for (int i = 0; i < (k / BLOCK_SIZE); ++i) {
+    for (int i = 0; i < (k / SHARED_BLOCK_SIZE); ++i) {
 
-        double* Asub = &A[k * BLOCK_SIZE * blockRow + BLOCK_SIZE * i];
+        double* Asub = &A[k * SHARED_BLOCK_SIZE * blockRow + SHARED_BLOCK_SIZE * i];
 
         // Get sub-matrix Asub of A
         // Matrix Asub = GetSubMatrix(A, blockRow, i);
 
-        double* Bsub = &B[n * BLOCK_SIZE * i + BLOCK_SIZE * blockCol];
+        double* Bsub = &B[n * SHARED_BLOCK_SIZE * i + SHARED_BLOCK_SIZE * blockCol];
 
         // Get sub-matrix Bsub of B
         // Matrix Bsub = GetSubMatrix(B, i, blockCol);
 
         // Shared memory used to store Asub and Bsub respectively
-        __shared__ double Ash[BLOCK_SIZE][BLOCK_SIZE];
-        __shared__ double Bsh[BLOCK_SIZE][BLOCK_SIZE];
-
-        // Load Asub and Bsub from device memory to shared memory
-        // Each thread loads one element of each sub-matrix
+        __shared__ double Ash[SHARED_BLOCK_SIZE][SHARED_BLOCK_SIZE];
+        __shared__ double Bsh[SHARED_BLOCK_SIZE][SHARED_BLOCK_SIZE];
 
         // return A.elements[row * A.stride + col];
         // Ash[row][col] = GetElement(Asub, row, col);
@@ -463,7 +462,7 @@ __global__ void gpu5_kernel(int m, int n, int k, double* A, double* B, double* C
         // before starting the computation
         __syncthreads();
         // Multiply Asub and Bsub together
-        for (int e = 0; e < BLOCK_SIZE; ++e)
+        for (int e = 0; e < SHARED_BLOCK_SIZE; ++e)
             Cvalue += Ash[row][e] * Bsh[e][col];
 
         // Synchronize to make sure that the preceding
@@ -507,11 +506,11 @@ __device__ void SetElement(Matrix A, int row, int col,
 __device__ Matrix GetSubMatrix(Matrix A, int row, int col)
 {
     Matrix Asub;
-    Asub.width = BLOCK_SIZE;
-    Asub.height = BLOCK_SIZE;
+    Asub.width = SHARED_BLOCK_SIZE;
+    Asub.height = SHARED_BLOCK_SIZE;
     Asub.stride = A.stride;
-    Asub.elements = &A.elements[A.stride * BLOCK_SIZE * row
-        + BLOCK_SIZE * col];
+    Asub.elements = &A.elements[A.stride * SHARED_BLOCK_SIZE * row
+        + SHARED_BLOCK_SIZE * col];
     return Asub;
 }
 
@@ -519,7 +518,7 @@ __device__ Matrix GetSubMatrix(Matrix A, int row, int col)
 __global__ void MatMulKernel(const Matrix, const Matrix, Matrix);
 
 // Matrix multiplication - Host code
-// Matrix dimensions are assumed to be multiples of BLOCK_SIZE
+// Matrix dimensions are assumed to be multiples of SHARED_BLOCK_SIZE
 void MatMul(const Matrix A, const Matrix B, Matrix C)
 {
     // Load A and B to device memory
@@ -543,7 +542,7 @@ void MatMul(const Matrix A, const Matrix B, Matrix C)
     cudaMalloc(&d_C.elements, size);
 
     // Invoke kernel
-    dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
+    dim3 dimBlock(SHARED_BLOCK_SIZE, SHARED_BLOCK_SIZE);
     dim3 dimGrid(B.width / dimBlock.x, A.height / dimBlock.y);
     MatMulKernel << <dimGrid, dimBlock >> > (d_A, d_B, d_C);
     cudaDeviceSynchronize();
@@ -580,7 +579,7 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C)
     // required to compute Csub
     // Multiply each pair of sub-matrices together
     // and accumulate the results
-    for (int m = 0; m < (A.width / BLOCK_SIZE); ++m) {
+    for (int m = 0; m < (A.width / SHARED_BLOCK_SIZE); ++m) {
 
         // Get sub-matrix Asub of A
         Matrix Asub = GetSubMatrix(A, blockRow, m);
@@ -589,8 +588,8 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C)
         Matrix Bsub = GetSubMatrix(B, m, blockCol);
 
         // Shared memory used to store Asub and Bsub respectively
-        __shared__ double As[BLOCK_SIZE][BLOCK_SIZE];
-        __shared__ double Bs[BLOCK_SIZE][BLOCK_SIZE];
+        __shared__ double As[SHARED_BLOCK_SIZE][SHARED_BLOCK_SIZE];
+        __shared__ double Bs[SHARED_BLOCK_SIZE][SHARED_BLOCK_SIZE];
 
         // Load Asub and Bsub from device memory to shared memory
         // Each thread loads one element of each sub-matrix
@@ -601,7 +600,7 @@ __global__ void MatMulKernel(Matrix A, Matrix B, Matrix C)
         // before starting the computation
         __syncthreads();
         // Multiply Asub and Bsub together
-        for (int e = 0; e < BLOCK_SIZE; ++e)
+        for (int e = 0; e < SHARED_BLOCK_SIZE; ++e)
             Cvalue += As[row][e] * Bs[e][col];
 
         // Synchronize to make sure that the preceding
@@ -646,7 +645,7 @@ void matmult_gpu5(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     // MatMul(mA, mB, mC);
 
     // 20% faster than using structs
-    dim3 dimBlock(BLOCK_SIZE, BLOCK_SIZE);
+    dim3 dimBlock(SHARED_BLOCK_SIZE, SHARED_BLOCK_SIZE);
     dim3 dimGrid(n / dimBlock.x, m / dimBlock.y);
     gpu5_kernel << <dimGrid, dimBlock >> > (m, n, k, A_d, B_d, C_d);
     cudaDeviceSynchronize();
@@ -693,5 +692,8 @@ void matmult_gpulib(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaFree(C_d);
 }
 
+//   Total amount of constant memory:               65536 bytes
+//   Total amount of shared memory per block:       49152 bytes
+//   Total shared memory per multiprocessor:        167936 bytes
 
 }
