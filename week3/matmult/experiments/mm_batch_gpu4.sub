@@ -26,7 +26,7 @@ EXECUTABLE=matmult_f.nvcc
 
 # define the permutation type in PERM
 #
-PERM="lib"
+PERM="gpu4"
 
 # enable(1)/disable(0) result checking
 export MATMULT_COMPARE=0            # - control result comparison (def: 1)
