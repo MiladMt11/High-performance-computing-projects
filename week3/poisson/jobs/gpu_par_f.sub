@@ -11,13 +11,14 @@
 #       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
 #       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
 #
-#BSUB -o mm_cpu_nonorm_small_%J.out
-#BSUB -R "rusage[mem=2GB]"
-#BSUB -J mm_cpu_nonorm
-#BSUB -q hpc
+#BSUB -o mm_gpu_par_f_%J.out
+#BSUB -M 2GB
+#BSUB -J mm_gpu_par_f
+#BSUB -q hpcintrogpu
 #BSUB -W 30
 #BSUB -R "select[model == XeonGold6226R]"
-#BSUB -n 1 -R "span[hosts=1]"
+#BSUB -gpu "num=1:mode=exclusive_process"
+#BSUB -n 12 -R "span[hosts=1]"
 
 # Load the cuda module
 module load cuda/11.5.1
@@ -34,21 +35,15 @@ export OMP_WAIT_POLICY=active
 # if you use a runtime schedule, define it below
 # export OMP_DISPLAY_ENV=verbose
 
-# check these?
-# export OMP_PLACES=numa_domains
-# export $VAR=spread
-# export OMP_DISPLAY_AFFINITY=verbose
-
 # experiment name 
 #
 JID=${LSB_JOBID}
 
 # start the collect command with the above settings
 lscpu
-../main cpu_nonorm  40 10000 .01 20
-../main cpu_nonorm  50 10000 .01 20
-../main cpu_nonorm  60 10000 .01 20
-../main cpu_nonorm  70 10000 .01 20
-../main cpu_nonorm  80 10000 .01 20
-../main cpu_nonorm  90 10000 .01 20
-../main cpu_nonorm 100 10000 .01 20
+/appl/cuda/11.5.1/samples/bin/x86_64/linux/release/deviceQuery
+../main gpu_par_f 200 50000 .01 20
+../main gpu_par_f 400 5000 .01 20
+../main gpu_par_f 600 2000 .01 20
+../main gpu_par_f 800 1000 .01 20
+../main gpu_par_f 1000 400 .01 20

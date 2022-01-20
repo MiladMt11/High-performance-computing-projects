@@ -1,0 +1,3 @@
+Loaded module: cuda/11.5.1
+Loaded module: gcc/10.3.0-binutils-2.36.1
+==PROF== Connected to process 30539 (/zhome/7e/c/151330/hpc/week3_poisson/main)

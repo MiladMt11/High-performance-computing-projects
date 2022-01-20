@@ -46,7 +46,7 @@ int gpu_par(int N, int iter_max, double ***u_h) {
     transfer_3d(u1_d, u_h, N+2, N+2, N+2, cudaMemcpyHostToDevice);
     transfer_3d(u2_d, u_h, N+2, N+2, N+2, cudaMemcpyHostToDevice);
 
-    int blocks = (N + 7) / 8;
+    int blocks = ((N+1) + 7) / 8;
     dim3 dimGrid(blocks,blocks,blocks);
     dim3 dimBlock(8,8,8);
 

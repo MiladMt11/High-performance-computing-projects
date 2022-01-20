@@ -1,0 +1,35 @@
+#!/bin/bash
+# 02614 - High-Performance Computing, January 2022
+# 
+# batch script to run collect on a decidated server in the hpcintro
+# queue
+#
+# Author: Bernd Dammann <bd@cc.dtu.dk>
+#
+# Note: to get more cores, change the n value below to the
+#       number of cores you want to use.  Later on, use the
+#       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
+#       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
+#
+#BSUB -o mm_gpu_par_profile_%J.out
+#BSUB -R "rusage[mem=2048]"
+#BSUB -J gpu_par_profile
+#BSUB -q hpcintrogpu
+### -- Select the resources: for jobs using 2 GPUs use num=2
+#BSUB -gpu "num=1:mode=exclusive_process"
+#BSUB -W 30
+#BSUB -R "select[model == XeonGold6226R]"
+#BSUB -n 16 -R "span[hosts=1]"
+
+export TMPDIR=$__LSF_JOB_TMPDIR__ 
+
+# Load the cuda module
+module load cuda/11.5.1
+module load gcc/10.3.0-binutils-2.36.1
+
+nv-nsight-cu-cli -o profile_$LSB_JOBID \
+    --section MemoryWorkloadAnalysis \
+    --section MemoryWorkloadAnalysis_Chart \
+    --section ComputeWorkloadAnalysis \
+    ../main gpu_par 400 5000 .01 20
+
