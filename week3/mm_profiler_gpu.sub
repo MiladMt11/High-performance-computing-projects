@@ -8,7 +8,7 @@
 #
 #BSUB -J mm_profiler
 #BSUB -o mm_profiler_%J.out
-#BSUB -q hpcintrogpu
+#BSUB -q hpcintrogpu -X
 #BSUB -n 1
 #BSUB -R "rusage[mem=2048]"
 ### -- Select the resources: for jobs using 2 GPUs use num=2
@@ -25,27 +25,31 @@ export TMPDIR=$__LSF_JOB_TMPDIR__
 module load cuda/11.5.1
 module load gcc/10.3.0-binutils-2.36.1
 
-export MFLOPS_MAX_IT=1  
-
-nv-nsight-cu-cli -o profile_$LSB_JOBID \ 
-    --section MemoryWorkloadAnalysis \ 
-    --section MemoryWorkloadAnalysis_Chart \ 
-    --section ComputeWorkloadAnalysis \ 
-
-
-EXECUTABLE=matmult_f.nvcc
+export MFLOPS_MAX_IT=0
 
 # define the mkn values in the MKN variable
 #
-SIZES="2048 2048 2048"
+S="2048 2048 2048"
 
 # define the permutation type in PERM
 #
 PERM="gpu2"
 
 
-# start the collect command with the above settings
-for S in $SIZES
-do
-    ./$EXECUTABLE $PERM $S $S $S 
-done
+# Quick textual performance info
+nv-nsight-cu-cli -o profile_$LSB_JOBID \ 
+    --section MemoryWorkloadAnalysis \  # Outputs the achieved memory bandwidth etc.
+    --section MemoryWorkloadAnalysis_Chart \ 
+    --section ComputeWorkloadAnalysis \
+    $EXECUTABLE $PERM $S $S $S 
+
+
+# define executable
+EXECUTABLE=matmult_f.nvcc
+
+# generate a profile report
+nsys profile $EXECUTABLE $PERM $S $S $S
+
+# open the profiler
+nv-nsight-cu-cli --open-in-ui -i profile_$LSB_JOBID.ncu-rep
+
