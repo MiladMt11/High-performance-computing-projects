@@ -8,13 +8,13 @@
 #
 #BSUB -J mm_batch_gpu
 #BSUB -o mm_batch_gpu%J.out
+#BSUB -e mm_batch_gpu%J.err
 #BSUB -q hpcintrogpu
 #BSUB -n 1
 #BSUB -R "rusage[mem=4096]"
 #BSUB -gpu "num=1:mode=exclusive_process"
 #BSUB -W 1:00
 #BSUB -R "select[model == XeonGold6226R]"
-#BSUB -R "span[hosts=1] affinity[socket(1)]"
 
 export TMPDIR=$__LSF_JOB_TMPDIR__ 
 
@@ -33,10 +33,12 @@ S="2048 2048 2048"
 PERM="gpu4"
 
 # define executable
-EXECUTABLE=../matmult_f.nvcc
+EXECUTABLE=matmult_f.nvcc
+
+cd ..
 
 # Quick textual performance info
-nv-nsight-cu-cli -o mm_profile_$LSB_JOBID \
+nv-nsight-cu-cli -o profile/mm_profile_$LSB_JOBID \
 --section LaunchStats \
 --section SpeedOfLight \
 --section Occupancy \
@@ -46,4 +48,4 @@ nv-nsight-cu-cli -o mm_profile_$LSB_JOBID \
 $EXECUTABLE $PERM $S
 
 # generate a profile report
-TMPDIR=. nsys profile $EXECUTABLE $PERM $S
+TMPDIR=profile nsys profile -o profile/mm_profile_$LSB_JOBID $EXECUTABLE $PERM $S
