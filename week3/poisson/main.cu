@@ -12,6 +12,7 @@
 #include "gpu_seq.h"
 #include "gpu_par.h"
 #include "gpu_par2.h"
+#include "gpu_norm.h"
 
 int
 main(int argc, char *argv[])
@@ -112,8 +113,10 @@ main(int argc, char *argv[])
         }
     }
     else if (strcmp(method, "gpu_norm") == 0) {
-        printf("%s is not yet implemented.\n", method);
-        ret = 1;
+        double start = omp_get_wtime();
+        iters = gpu_norm(N, iter_max, tolerance, u_h);
+        double end = omp_get_wtime();
+        running_time = end - start;
     } else {
         printf("No such implementation %s.\n", method);
         ret = 1;

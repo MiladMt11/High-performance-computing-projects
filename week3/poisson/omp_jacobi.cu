@@ -79,7 +79,7 @@ int cpu_jacobi_nonorm(
         {
             for (int k = 0; k < N + 2; ++k)
             {
-                u[i][j][k] = u2[i][j][k];
+                u[i][j][k] = u1[i][j][k];
             }
         }
     }
@@ -156,12 +156,12 @@ int cpu_jacobi_norm(
             }
         }
 
-        if (norm < tolerance * tolerance)
-            break;
-
         double ***utmp = u2;
         u2 = u1;
         u1 = utmp;
+
+        if (norm < tolerance * tolerance)
+            break;
     }
 
     // Copy back results.
@@ -171,7 +171,7 @@ int cpu_jacobi_norm(
         {
             for (int k = 0; k < N + 2; ++k)
             {
-                u[i][j][k] = u2[i][j][k];
+                u[i][j][k] = u1[i][j][k];
             }
         }
     }
