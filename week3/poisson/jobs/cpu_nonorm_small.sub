@@ -1,0 +1,54 @@
+#!/bin/bash
+# 02614 - High-Performance Computing, January 2022
+# 
+# batch script to run collect on a decidated server in the hpcintro
+# queue
+#
+# Author: Bernd Dammann <bd@cc.dtu.dk>
+#
+# Note: to get more cores, change the n value below to the
+#       number of cores you want to use.  Later on, use the
+#       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
+#       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
+#
+#BSUB -o mm_cpu_nonorm_small_%J.out
+#BSUB -R "rusage[mem=2GB]"
+#BSUB -J mm_cpu_nonorm
+#BSUB -q hpc
+#BSUB -W 30
+#BSUB -R "select[model == XeonGold6226R]"
+#BSUB -n 12 -R "span[hosts=1]"
+
+# Load the cuda module
+module load cuda/11.5.1
+module load gcc/10.3.0-binutils-2.36.1
+
+# set some OpenMP variables here
+#
+# no. of threads
+export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
+#
+# keep idle threads spinning (needed to monitor idle times!)
+export OMP_WAIT_POLICY=active
+#
+# if you use a runtime schedule, define it below
+# export OMP_DISPLAY_ENV=verbose
+
+# check these?
+# export OMP_PLACES=numa_domains
+# export $VAR=spread
+# export OMP_DISPLAY_AFFINITY=verbose
+
+# experiment name 
+#
+JID=${LSB_JOBID}
+
+# start the collect command with the above settings
+lscpu
+../main cpu_nonorm 40 100000 .01 20
+../main cpu_nonorm 50 100000 .01 20
+../main cpu_nonorm 60 100000 .01 20
+../main cpu_nonorm 70 100000 .01 20
+../main cpu_nonorm 80 100000 .01 20
+../main cpu_nonorm 90 100000 .01 20
+../main cpu_nonorm 100 100000 .01 20

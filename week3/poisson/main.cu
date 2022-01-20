@@ -4,6 +4,8 @@
 //
 #include <stdio.h>
 #include <omp.h>
+#include <cuda_runtime_api.h>
+#include <helper_cuda.h>
 #include "alloc3d.h"
 #include "alloc3d_gpu.h"
 #include "transfer3d_gpu.h"
@@ -33,6 +35,11 @@ main(int argc, char *argv[])
         if (err != cudaSuccess || devices == 0) {
             printf("Error: This machine doesn't have a GPU.\n");
             return 1;
+        } else {
+            int *alloc;
+
+            checkCudaErrors(cudaMalloc((void**) &alloc, sizeof(int)));
+            checkCudaErrors(cudaFree(alloc));
         }
     }
 
@@ -130,7 +137,7 @@ main(int argc, char *argv[])
             }
         }
     }
-    printf("SUM: %f\n", sum);
+    //printf("SUM: %f\n", sum);
 
     double bytes_alloc = sizeof(double) * (double) nElms;
     double flops_per_sec = (8 * iters * (double) nElms) / running_time;
