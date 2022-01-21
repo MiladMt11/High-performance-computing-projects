@@ -1,0 +1,120 @@
+Loaded module: cuda/11.5.1
+Loaded module: gcc/10.3.0-binutils-2.36.1
+Architecture:          x86_64
+CPU op-mode(s):        32-bit, 64-bit
+Byte Order:            Little Endian
+CPU(s):                32
+On-line CPU(s) list:   0-31
+Thread(s) per core:    1
+Core(s) per socket:    16
+Socket(s):             2
+NUMA node(s):          2
+Vendor ID:             GenuineIntel
+CPU family:            6
+Model:                 85
+Model name:            Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz
+Stepping:              7
+CPU MHz:               2900.000
+BogoMIPS:              5800.00
+Virtualization:        VT-x
+L1d cache:             32K
+L1i cache:             32K
+L2 cache:              1024K
+L3 cache:              22528K
+NUMA node0 CPU(s):     0-15
+NUMA node1 CPU(s):     16-31
+Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca cmov pat pse36 clflush dts acpi mmx fxsr sse sse2 ss ht tm pbe syscall nx pdpe1gb rdtscp lm constant_tsc art arch_perfmon pebs bts rep_good nopl xtopology nonstop_tsc aperfmperf eagerfpu pni pclmulqdq dtes64 monitor ds_cpl vmx smx est tm2 ssse3 sdbg fma cx16 xtpr pdcm pcid dca sse4_1 sse4_2 x2apic movbe popcnt tsc_deadline_timer aes xsave avx f16c rdrand lahf_lm abm 3dnowprefetch epb cat_l3 cdp_l3 invpcid_single intel_ppin intel_pt ssbd mba ibrs ibpb stibp ibrs_enhanced tpr_shadow vnmi flexpriority ept vpid fsgsbase tsc_adjust bmi1 hle avx2 smep bmi2 erms invpcid cqm mpx rdt_a avx512f avx512dq rdseed adx smap clflushopt clwb avx512cd avx512bw avx512vl xsaveopt xsavec xgetbv1 cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_local dtherm arat pln pts hwp_epp pku ospke avx512_vnni md_clear spec_ctrl intel_stibp flush_l1d arch_capabilities
+cpu_norm 200 5000 64000.000000 27285.116064 11.728006
+cpu_norm 400 500 512000.000000 19939.712291 12.838701
+cpu_norm 600 200 1728000.000000 19239.419246 17.963120
+cpu_norm 800 100 4096000.000000 18584.650766 22.039693
+cpu_norm 1000 40 8000000.000000 17037.341376 18.782273
+cpu_norm 1200 30 13824000.000000 16424.795469 25.249629
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 12352289: <mm_cpu_norm> in cluster <dcc> Done
+
+Job <mm_cpu_norm> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Thu Jan 20 17:44:14 2022
+Job was executed on host(s) <16*n-62-12-31>, in queue <man>, as user <s200770> in cluster <dcc> at Thu Jan 20 17:44:14 2022
+</zhome/7e/c/151330> was used as the home directory.
+</zhome/7e/c/151330/hpc/week3_poisson/jobs> was used as the working directory.
+Started at Thu Jan 20 17:44:14 2022
+Terminated at Thu Jan 20 17:46:11 2022
+Results reported at Thu Jan 20 17:46:11 2022
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+# 02614 - High-Performance Computing, January 2022
+# 
+# batch script to run collect on a decidated server in the hpcintro
+# queue
+#
+# Author: Bernd Dammann <bd@cc.dtu.dk>
+#
+# Note: to get more cores, change the n value below to the
+#       number of cores you want to use.  Later on, use the
+#       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
+#       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
+#
+#BSUB -o mm_cpu_norm_1_%J.out
+#BSUB -R "rusage[mem=40GB]"
+#BSUB -J mm_cpu_norm
+#BSUB -q man
+#BSUB -W 30
+#BSUB -R "select[model == XeonGold6226R]"
+#BSUB -n 16 -R "span[hosts=1]"
+
+# Load the cuda module
+module load cuda/11.5.1
+module load gcc/10.3.0-binutils-2.36.1
+
+# set some OpenMP variables here
+#
+# no. of threads
+export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
+#
+# keep idle threads spinning (needed to monitor idle times!)
+export OMP_WAIT_POLICY=active
+#
+# if you use a runtime schedule, define it below
+# export OMP_DISPLAY_ENV=verbose
+
+# check these?
+# export OMP_PLACES=numa_domains
+# export $VAR=spread
+# export OMP_DISPLAY_AFFINITY=verbose
+
+# experiment name 
+#
+JID=${LSB_JOBID}
+
+# start the collect command with the above settings
+lscpu
+numactl --cpunodebind=0 ../main cpu_norm 200 5000 .01 20
+numactl --cpunodebind=0 ../main cpu_norm 400 500 .01 20
+numactl --cpunodebind=0 ../main cpu_norm 600 200 .01 20
+
+(... more ...)
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   1741.08 sec.
+    Max Memory :                                 194 MB
+    Average Memory :                             194.00 MB
+    Total Requested Memory :                     655360.00 MB
+    Delta Memory :                               655166.00 MB
+    Max Swap :                                   -
+    Max Processes :                              4
+    Max Threads :                                20
+    Run time :                                   117 sec.
+    Turnaround time :                            117 sec.
+
+The output (if any) is above this job summary.
+

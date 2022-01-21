@@ -14,7 +14,7 @@ CPU family:            6
 Model:                 85
 Model name:            Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz
 Stepping:              7
-CPU MHz:               2678.570
+CPU MHz:               1199.896
 CPU max MHz:           2900.0000
 CPU min MHz:           1200.0000
 BogoMIPS:              5800.00
@@ -30,9 +30,47 @@ Flags:                 fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca 
 
  CUDA Device Query (Runtime API) version (CUDART static linking)
 
-Detected 1 CUDA Capable device(s)
+Detected 2 CUDA Capable device(s)
 
 Device 0: "NVIDIA A100-PCIE-40GB"
+  CUDA Driver Version / Runtime Version          11.5 / 11.5
+  CUDA Capability Major/Minor version number:    8.0
+  Total amount of global memory:                 40536 MBytes (42505273344 bytes)
+  (108) Multiprocessors, (064) CUDA Cores/MP:    6912 CUDA Cores
+  GPU Max Clock rate:                            1410 MHz (1.41 GHz)
+  Memory Clock rate:                             1215 Mhz
+  Memory Bus Width:                              5120-bit
+  L2 Cache Size:                                 41943040 bytes
+  Maximum Texture Dimension Size (x,y,z)         1D=(131072), 2D=(131072, 65536), 3D=(16384, 16384, 16384)
+  Maximum Layered 1D Texture Size, (num) layers  1D=(32768), 2048 layers
+  Maximum Layered 2D Texture Size, (num) layers  2D=(32768, 32768), 2048 layers
+  Total amount of constant memory:               65536 bytes
+  Total amount of shared memory per block:       49152 bytes
+  Total shared memory per multiprocessor:        167936 bytes
+  Total number of registers available per block: 65536
+  Warp size:                                     32
+  Maximum number of threads per multiprocessor:  2048
+  Maximum number of threads per block:           1024
+  Max dimension size of a thread block (x,y,z): (1024, 1024, 64)
+  Max dimension size of a grid size    (x,y,z): (2147483647, 65535, 65535)
+  Maximum memory pitch:                          2147483647 bytes
+  Texture alignment:                             512 bytes
+  Concurrent copy and kernel execution:          Yes with 3 copy engine(s)
+  Run time limit on kernels:                     No
+  Integrated GPU sharing Host Memory:            No
+  Support host page-locked memory mapping:       Yes
+  Alignment requirement for Surfaces:            Yes
+  Device has ECC support:                        Enabled
+  Device supports Unified Addressing (UVA):      Yes
+  Device supports Managed Memory:                Yes
+  Device supports Compute Preemption:            Yes
+  Supports Cooperative Kernel Launch:            Yes
+  Supports MultiDevice Co-op Kernel Launch:      Yes
+  Device PCI Domain ID / Bus ID / location ID:   0 / 55 / 0
+  Compute Mode:
+     < Exclusive Process (many threads in one process is able to use ::cudaSetDevice() with this device) >
+
+Device 1: "NVIDIA A100-PCIE-40GB"
   CUDA Driver Version / Runtime Version          11.5 / 11.5
   CUDA Capability Major/Minor version number:    8.0
   Total amount of global memory:                 40536 MBytes (42505273344 bytes)
@@ -69,26 +107,29 @@ Device 0: "NVIDIA A100-PCIE-40GB"
   Device PCI Domain ID / Bus ID / location ID:   0 / 134 / 0
   Compute Mode:
      < Exclusive Process (many threads in one process is able to use ::cudaSetDevice() with this device) >
+> Peer access from NVIDIA A100-PCIE-40GB (GPU0) -> NVIDIA A100-PCIE-40GB (GPU1) : Yes
+> Peer access from NVIDIA A100-PCIE-40GB (GPU1) -> NVIDIA A100-PCIE-40GB (GPU0) : Yes
 
-deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 11.5, CUDA Runtime Version = 11.5, NumDevs = 1
+deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 11.5, CUDA Runtime Version = 11.5, NumDevs = 2
 Result = PASS
-gpu_par_f 200 50000 64000.000000 144199.538111 22.191472
-gpu_par_f 400 5000 512000.000000 105909.621922 24.171553
-gpu_par_f 600 2000 1728000.000000 102603.289052 33.683131
-gpu_par_f 800 1000 4096000.000000 97557.802751 41.985365
-gpu_par_f 1000 400 8000000.000000 85451.489788 37.448148
+gpu_par2 200 50000 64000.000000 214656.101890 14.907566
+gpu_par2 400 5000 512000.000000 206667.483390 12.387048
+gpu_par2 600 2000 1728000.000000 197571.611897 17.492392
+gpu_par2 800 1000 4096000.000000 180782.777023 22.657026
+gpu_par2 1000 400 8000000.000000 154796.134276 20.672351
+gpu_par2 1200 300 13824000.000000 143714.384353 28.857237
 
 ------------------------------------------------------------
 Sender: LSF System <lsfadmin@hpc.dtu.dk>
-Subject: Job 12351046: <mm_gpu_par_f> in cluster <dcc> Done
+Subject: Job 12352054: <mm_gpu_par2> in cluster <dcc> Done
 
-Job <mm_gpu_par_f> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Thu Jan 20 14:11:56 2022
-Job was executed on host(s) <12*n-62-12-22>, in queue <hpcintrogpu>, as user <s200770> in cluster <dcc> at Thu Jan 20 14:11:58 2022
+Job <mm_gpu_par2> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Thu Jan 20 16:49:10 2022
+Job was executed on host(s) <12*n-62-12-24>, in queue <hpcintrogpu>, as user <s200770> in cluster <dcc> at Thu Jan 20 16:49:12 2022
 </zhome/7e/c/151330> was used as the home directory.
 </zhome/7e/c/151330/hpc/week3_poisson/jobs> was used as the working directory.
-Started at Thu Jan 20 14:11:58 2022
-Terminated at Thu Jan 20 14:14:47 2022
-Results reported at Thu Jan 20 14:14:47 2022
+Started at Thu Jan 20 16:49:12 2022
+Terminated at Thu Jan 20 16:51:19 2022
+Results reported at Thu Jan 20 16:51:19 2022
 
 Your job looked like:
 
@@ -107,13 +148,13 @@ Your job looked like:
 #       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
 #       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
 #
-#BSUB -o mm_gpu_par_f_%J.out
+#BSUB -o mm_gpu_par2_%J.out
 #BSUB -M 2GB
-#BSUB -J mm_gpu_par_f
+#BSUB -J mm_gpu_par2
 #BSUB -q hpcintrogpu
 #BSUB -W 30
 #BSUB -R "select[model == XeonGold6226R]"
-#BSUB -gpu "num=1:mode=exclusive_process"
+#BSUB -gpu "num=2:mode=exclusive_process"
 #BSUB -n 12 -R "span[hosts=1]"
 
 # Load the cuda module
@@ -138,28 +179,30 @@ JID=${LSB_JOBID}
 # start the collect command with the above settings
 lscpu
 /appl/cuda/11.5.1/samples/bin/x86_64/linux/release/deviceQuery
-../main gpu_par_f 200 50000 .01 20
-../main gpu_par_f 400 5000 .01 20
-../main gpu_par_f 600 2000 .01 20
-../main gpu_par_f 800 1000 .01 20
-../main gpu_par_f 1000 400 .01 20
+../main gpu_par2 200 50000 .01 20
+../main gpu_par2 400 5000 .01 20
+../main gpu_par2 600 2000 .01 20
+../main gpu_par2 800 1000 .01 20
+../main gpu_par2 1000 400 .01 20
+../main gpu_par2 1200 300 .01 20
 
+(... more ...)
 ------------------------------------------------------------
 
 Successfully completed.
 
 Resource usage summary:
 
-    CPU time :                                   168.50 sec.
-    Max Memory :                                 3346 MB
-    Average Memory :                             2277.33 MB
+    CPU time :                                   126.54 sec.
+    Max Memory :                                 84 MB
+    Average Memory :                             84.00 MB
     Total Requested Memory :                     24576.00 MB
-    Delta Memory :                               21230.00 MB
+    Delta Memory :                               24492.00 MB
     Max Swap :                                   -
     Max Processes :                              4
-    Max Threads :                                7
-    Run time :                                   174 sec.
-    Turnaround time :                            171 sec.
+    Max Threads :                                8
+    Run time :                                   127 sec.
+    Turnaround time :                            129 sec.
 
 The output (if any) is above this job summary.
 

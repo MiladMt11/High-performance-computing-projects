@@ -47,3 +47,4 @@ lscpu
 ../main gpu_par 600 2000 .01 20
 ../main gpu_par 800 1000 .01 20
 ../main gpu_par 1000 400 .01 20
+../main gpu_par 1200 300 .01 20

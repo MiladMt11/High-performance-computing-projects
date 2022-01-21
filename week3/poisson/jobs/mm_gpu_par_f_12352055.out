@@ -14,7 +14,7 @@ CPU family:            6
 Model:                 85
 Model name:            Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz
 Stepping:              7
-CPU MHz:               2900.000
+CPU MHz:               1199.896
 CPU max MHz:           2900.0000
 CPU min MHz:           1200.0000
 BogoMIPS:              5800.00
@@ -72,23 +72,24 @@ Device 0: "NVIDIA A100-PCIE-40GB"
 
 deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 11.5, CUDA Runtime Version = 11.5, NumDevs = 1
 Result = PASS
-gpu_par 200 50000 64000.000000 176604.310364 18.119603
-gpu_par 400 5000 512000.000000 133855.435315 19.125111
-gpu_par 600 2000 1728000.000000 129578.769525 26.671036
-gpu_par 800 1000 4096000.000000 124126.328379 32.998640
-gpu_par 1000 400 8000000.000000 109242.330451 29.292674
+gpu_par_f 200 50000 64000.000000 103682.508432 30.863451
+gpu_par_f 400 5000 512000.000000 93772.971364 27.299977
+gpu_par_f 600 2000 1728000.000000 93232.024707 37.068808
+gpu_par_f 800 1000 4096000.000000 88445.297461 46.311111
+gpu_par_f 1000 400 8000000.000000 78908.198862 40.553454
+/zhome/7e/c/151330/.lsbatch/1642693754.12352055.shell: line 50:  4833 Killed                  ../main gpu_par_f 1200 300 .01 20
 
 ------------------------------------------------------------
 Sender: LSF System <lsfadmin@hpc.dtu.dk>
-Subject: Job 12351047: <mm_gpu_par> in cluster <dcc> Done
+Subject: Job 12352055: <mm_gpu_par_f> in cluster <dcc> Exited
 
-Job <mm_gpu_par> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Thu Jan 20 14:11:56 2022
-Job was executed on host(s) <12*n-62-12-19>, in queue <hpcintrogpu>, as user <s200770> in cluster <dcc> at Thu Jan 20 14:11:57 2022
+Job <mm_gpu_par_f> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Thu Jan 20 16:49:14 2022
+Job was executed on host(s) <12*n-62-12-22>, in queue <hpcintrogpu>, as user <s200770> in cluster <dcc> at Thu Jan 20 16:49:16 2022
 </zhome/7e/c/151330> was used as the home directory.
 </zhome/7e/c/151330/hpc/week3_poisson/jobs> was used as the working directory.
-Started at Thu Jan 20 14:11:57 2022
-Terminated at Thu Jan 20 14:14:09 2022
-Results reported at Thu Jan 20 14:14:09 2022
+Started at Thu Jan 20 16:49:16 2022
+Terminated at Thu Jan 20 16:52:35 2022
+Results reported at Thu Jan 20 16:52:35 2022
 
 Your job looked like:
 
@@ -107,9 +108,9 @@ Your job looked like:
 #       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
 #       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
 #
-#BSUB -o mm_gpu_par_%J.out
+#BSUB -o mm_gpu_par_f_%J.out
 #BSUB -M 2GB
-#BSUB -J mm_gpu_par
+#BSUB -J mm_gpu_par_f
 #BSUB -q hpcintrogpu
 #BSUB -W 30
 #BSUB -R "select[model == XeonGold6226R]"
@@ -138,28 +139,31 @@ JID=${LSB_JOBID}
 # start the collect command with the above settings
 lscpu
 /appl/cuda/11.5.1/samples/bin/x86_64/linux/release/deviceQuery
-../main gpu_par 200 50000 .01 20
-../main gpu_par 400 5000 .01 20
-../main gpu_par 600 2000 .01 20
-../main gpu_par 800 1000 .01 20
-../main gpu_par 1000 400 .01 20
+../main gpu_par_f 200 50000 .01 20
+../main gpu_par_f 400 5000 .01 20
+../main gpu_par_f 600 2000 .01 20
+../main gpu_par_f 800 1000 .01 20
+../main gpu_par_f 1000 400 .01 20
+../main gpu_par_f 1200 300 .01 20
 
+(... more ...)
 ------------------------------------------------------------
 
-Successfully completed.
+TERM_MEMLIMIT: job killed after reaching LSF memory usage limit.
+Exited with exit code 137.
 
 Resource usage summary:
 
-    CPU time :                                   131.30 sec.
-    Max Memory :                                 75 MB
-    Average Memory :                             75.00 MB
+    CPU time :                                   198.40 sec.
+    Max Memory :                                 24576 MB
+    Average Memory :                             14295.50 MB
     Total Requested Memory :                     24576.00 MB
-    Delta Memory :                               24501.00 MB
+    Delta Memory :                               0.00 MB
     Max Swap :                                   -
     Max Processes :                              4
     Max Threads :                                7
-    Run time :                                   132 sec.
-    Turnaround time :                            133 sec.
+    Run time :                                   263 sec.
+    Turnaround time :                            201 sec.
 
 The output (if any) is above this job summary.
 

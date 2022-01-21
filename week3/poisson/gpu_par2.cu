@@ -6,11 +6,11 @@
 #include <helper_cuda.h>
 
 __global__ void gpu_par2_kernel0(int N, int N1, double ***u1, double ***u2) {
-    int i = 1 + blockIdx.x * blockDim.x + threadIdx.x;
-    int j = 1 + blockIdx.y * blockDim.y + threadIdx.y;
-    int k = 1 + blockIdx.z * blockDim.z + threadIdx.z;
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    int j = blockIdx.y * blockDim.y + threadIdx.y;
+    int k = blockIdx.z * blockDim.z + threadIdx.z;
 
-    if (i < N1 && j <= N && k <= N) {
+    if (0 < i && 0 < j && 0 < k && i < N1 && j <= N && k <= N) {
         double delta = 2.0 / (double)(N + 2);
         double delta2 = delta * delta;
 
@@ -32,11 +32,11 @@ __global__ void gpu_par2_kernel0(int N, int N1, double ***u1, double ***u2) {
 }
 
 __global__ void gpu_par2_kernel1(int N, int N2, double ***u1, double ***u2) {
-    int i = 1 + blockIdx.x * blockDim.x + threadIdx.x;
-    int j = 1 + blockIdx.y * blockDim.y + threadIdx.y;
-    int k = 1 + blockIdx.z * blockDim.z + threadIdx.z;
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    int j = blockIdx.y * blockDim.y + threadIdx.y;
+    int k = blockIdx.z * blockDim.z + threadIdx.z;
 
-    if (i < N2 && j <= N && k <= N) {
+    if (0 < i && 0 < j && 0 < k && i < N2 && j <= N && k <= N) {
         double delta = 2.0 / (double)(N + 2);
         double delta2 = delta * delta;
 
@@ -116,9 +116,9 @@ int gpu_par2(int N, int iter_max, double ***u_h) {
     cudaSetDevice(1);
     cudaDeviceEnablePeerAccess(0, 0);
 
-    int blocks = (N + 7) / 8;
-    int blocks0 = (N1 + 7) / 8;
-    int blocks1 = (N2 + 7) / 8;
+    int blocks = (N + 8) / 8;
+    int blocks0 = (N1 + 8) / 8;
+    int blocks1 = (N2 + 8) / 8;
     dim3 dimGrid0(blocks0,blocks,blocks);
     dim3 dimGrid1(blocks1,blocks,blocks);
     dim3 dimBlock(8,8,8);

@@ -28,8 +28,5 @@ module load cuda/11.5.1
 module load gcc/10.3.0-binutils-2.36.1
 
 nv-nsight-cu-cli -o profile_$LSB_JOBID \
-    --section MemoryWorkloadAnalysis \
-    --section MemoryWorkloadAnalysis_Chart \
-    --section ComputeWorkloadAnalysis \
-    ../main gpu_par 400 5000 .01 20
+    ../main gpu_par 800 50 .01 20
 

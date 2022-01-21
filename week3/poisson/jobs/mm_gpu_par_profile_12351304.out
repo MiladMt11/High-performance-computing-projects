@@ -1,0 +1,134 @@
+Loaded module: cuda/11.5.1
+Loaded module: gcc/10.3.0-binutils-2.36.1
+==PROF== Connected to process 5751 (/zhome/7e/c/151330/hpc/week3_poisson/main)
+==PROF== Profiling "_Z23d_malloc_3d_gpu_kernel1PP..." - 1: 0%....50%....100% - 16 passes
+==PROF== Profiling "_Z23d_malloc_3d_gpu_kernel2PP..." - 2: 0%....50%....100% - 16 passes
+==PROF== Profiling "_Z23d_malloc_3d_gpu_kernel1PP..." - 3: 0%
+==WARNING== Backing up device memory in system memory. Kernel replay might be slow. Consider using "--replay-mode application" to avoid memory save-and-restore.
+....50%....100% - 16 passes
+==PROF== Profiling "_Z23d_malloc_3d_gpu_kernel2PP..." - 4: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 5: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 6: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 7: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 8: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 9: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 10: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 11: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 12: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 13: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 14: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 15: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 16: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 17: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 18: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 19: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 20: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 21: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 22: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 23: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 24: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 25: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 26: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 27: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 28: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 29: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 30: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 31: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 32: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 33: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 34: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 35: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 36: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 37: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 38: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 39: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 40: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 41: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 42: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 43: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 44: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 45: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 46: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 47: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 48: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 49: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 50: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 51: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 52: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 53: 0%....50%....100% - 16 passes
+==PROF== Profiling "gpu_par_kernel" - 54: 0%....50%....100% - 16 passes
+gpu_par 800 50 4096000.000000 2232.735254 91.726056
+==PROF== Disconnected from process 5751
+==PROF== Report: /zhome/7e/c/151330/hpc/week3_poisson/jobs/profile_12351304.ncu-rep
+
+------------------------------------------------------------
+Sender: LSF System <lsfadmin@hpc.dtu.dk>
+Subject: Job 12351304: <gpu_par_profile> in cluster <dcc> Done
+
+Job <gpu_par_profile> was submitted from host <hpclogin2> by user <s200770> in cluster <dcc> at Thu Jan 20 14:39:14 2022
+Job was executed on host(s) <16*n-62-12-22>, in queue <hpcintrogpu>, as user <s200770> in cluster <dcc> at Thu Jan 20 14:39:15 2022
+</zhome/7e/c/151330> was used as the home directory.
+</zhome/7e/c/151330/hpc/week3_poisson/jobs> was used as the working directory.
+Started at Thu Jan 20 14:39:15 2022
+Terminated at Thu Jan 20 14:40:50 2022
+Results reported at Thu Jan 20 14:40:50 2022
+
+Your job looked like:
+
+------------------------------------------------------------
+# LSBATCH: User input
+#!/bin/bash
+# 02614 - High-Performance Computing, January 2022
+# 
+# batch script to run collect on a decidated server in the hpcintro
+# queue
+#
+# Author: Bernd Dammann <bd@cc.dtu.dk>
+#
+# Note: to get more cores, change the n value below to the
+#       number of cores you want to use.  Later on, use the
+#       $LSB_DJOB_NUMPROC variable to use this number, e.g. in
+#       export OMP_NUM_THREADS=$LSB_DJOB_NUMPROC
+#
+#BSUB -o mm_gpu_par_profile_%J.out
+#BSUB -R "rusage[mem=2048]"
+#BSUB -J gpu_par_profile
+#BSUB -q hpcintrogpu
+### -- Select the resources: for jobs using 2 GPUs use num=2
+#BSUB -gpu "num=1:mode=exclusive_process"
+#BSUB -W 30
+#BSUB -R "select[model == XeonGold6226R]"
+#BSUB -n 16 -R "span[hosts=1]"
+
+export TMPDIR=$__LSF_JOB_TMPDIR__ 
+
+# Load the cuda module
+module load cuda/11.5.1
+module load gcc/10.3.0-binutils-2.36.1
+
+nv-nsight-cu-cli -o profile_$LSB_JOBID \
+    --section MemoryWorkloadAnalysis \
+    --section MemoryWorkloadAnalysis_Chart \
+    --section ComputeWorkloadAnalysis \
+    ../main gpu_par 800 50 .01 20
+
+
+------------------------------------------------------------
+
+Successfully completed.
+
+Resource usage summary:
+
+    CPU time :                                   106.78 sec.
+    Max Memory :                                 4076 MB
+    Average Memory :                             4075.67 MB
+    Total Requested Memory :                     32768.00 MB
+    Delta Memory :                               28692.00 MB
+    Max Swap :                                   -
+    Max Processes :                              6
+    Max Threads :                                18
+    Run time :                                   96 sec.
+    Turnaround time :                            96 sec.
+
+The output (if any) is above this job summary.
+

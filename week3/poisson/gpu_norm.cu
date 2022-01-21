@@ -32,12 +32,12 @@ double blockReduceSum(double value) {
 }
 
 __global__ void gpu_norm_kernel(int N, double ***u1, double ***u2, double *norm2_d) {
-    int i = 1 + blockIdx.x * blockDim.x + threadIdx.x;
-    int j = 1 + blockIdx.y * blockDim.y + threadIdx.y;
-    int k = 1 + blockIdx.z * blockDim.z + threadIdx.z;
+    int i = blockIdx.x * blockDim.x + threadIdx.x;
+    int j = blockIdx.y * blockDim.y + threadIdx.y;
+    int k = blockIdx.z * blockDim.z + threadIdx.z;
 
     double diff2 = 0.0;
-    if (i <= N && j <= N && k <= N) {
+    if (0 < i && 0 < j && 0 < k && i <= N && j <= N && k <= N) {
         double delta = 2.0 / (double)(N + 2);
         double delta2 = delta * delta;
 
