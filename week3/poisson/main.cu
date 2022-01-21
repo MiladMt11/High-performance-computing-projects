@@ -164,7 +164,7 @@ main(int argc, char *argv[])
             }
         }
     }
-    //printf("SUM: %f\n", sum);
+    printf("SUM: %f\n", sum);
 
     double bytes_alloc = sizeof(double) * (double) nElms;
     double flops_per_sec = (8 * iters * (double) nElms) / running_time;

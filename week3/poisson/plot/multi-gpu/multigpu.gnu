@@ -9,5 +9,7 @@ set ylabel 'Performance [Gflops/s]'
 #set title "blk runs with -O3 -ffast-math -floop-unroll"
 set key outside
 
-plot  'par.dat' using 1:($4/1000) title 'Single GPU', \
-     'par2.dat' using 1:($4/1000) title 'Two GPUs'
+plot 'par2.dat' using 1:($4/1000) title 'Two GPUs', \
+      'par.dat' using 1:($4/1000) title 'Single GPU', \
+     'cpu2.dat' using 1:($4/1000) title 'Two CPUs', \
+     'cpu1.dat' using 1:($4/1000) title 'Single CPU'
