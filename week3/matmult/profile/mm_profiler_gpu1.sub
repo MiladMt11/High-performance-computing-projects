@@ -26,7 +26,7 @@ export MFLOPS_MAX_IT=1
 
 # define the mkn values in the MKN variable
 #
-S="2048 2048 2048"
+S="4096 4096 4096"
 
 # define the permutation type in PERM
 #
@@ -40,11 +40,14 @@ cd ..
 # Quick textual performance info
 nv-nsight-cu-cli -o profile/mm_profile_$LSB_JOBID \
 --section LaunchStats \
+--section ComputeWorkloadAnalysis \
 --section SpeedOfLight \
+--section SchedulerStats \
 --section Occupancy \
 --section MemoryWorkloadAnalysis \
 --section MemoryWorkloadAnalysis_Chart \
 --section ComputeWorkloadAnalysis \
+--section WarpStateStats \
 $EXECUTABLE $PERM $S
 
 # generate a profile report

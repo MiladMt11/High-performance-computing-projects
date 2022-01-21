@@ -244,8 +244,8 @@ __global__ void gpu2_kernel(int m, int n, int k, double* A, double* B, double* C
     // B(k,n) k - # of rows; n - # of columns
     // C(m,n) m - # of rows; n - # of columns
     int threadRowID, threadColID;
-    threadRowID = blockIdx.x * blockDim.x + threadIdx.x;
-    threadColID = blockIdx.y * blockDim.y + threadIdx.y;
+    threadColID = blockIdx.x * blockDim.x + threadIdx.x;
+    threadRowID = blockIdx.y * blockDim.y + threadIdx.y;
 
     if (threadColID >= n || threadRowID >= m)
         return;
@@ -274,8 +274,8 @@ void matmult_gpu2(int m, int n, int k, double* A_h, double* B_h, double* C_h)
 
     // Launch kernel and synchronize
     int bs = BLOCK_SIZE;
-    int bsx = (m + (bs - 1)) / bs;
-    int bsy = (n + (bs - 1)) / bs;
+    int bsy = (m + (bs - 1)) / bs;
+    int bsx = (n + (bs - 1)) / bs;
     dim3 dimGrid(bsx, bsy, 1);
     dim3 dimBlock(bs, bs, 1);
     gpu2_kernel << <dimGrid, dimBlock >> > (m, n, k, A_d, B_d, C_d);
@@ -292,7 +292,7 @@ void matmult_gpu2(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaFree(C_d);
 }
 
-#define SUM_OVER_ROWS 0
+#define SUM_OVER_ROWS 1
 
 __global__ void gpu3_kernel(int m, int n, int k, double* A, double* B, double* C)
 {
@@ -395,7 +395,7 @@ void matmult_gpu3(int m, int n, int k, double* A_h, double* B_h, double* C_h)
     cudaFree(C_d);
 }
 
-#define COMP_N_ELEMENTS 64
+#define COMP_N_ELEMENTS 32
 
 __global__ void gpu4_kernel(int m, int n, int k, double* A, double* B, double* C)
 {
